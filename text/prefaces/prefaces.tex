@@ -1,0 +1,141 @@
+\begin{center}
+{\LARGE\bfseries\titulo}\\
+\end{center}
+\begin{center}
+\autor\
+\end{center}
+
+\section*{Resumen}
+
+\bigskip
+\noindent{\textbf{Palabras clave}: \textit{smart cities}, \textit{tiempo real}, \textit{tráfico}, \textit{raspberry pi},\textit{software libre}, \textit{análisis de datos}, \textit{REST api}\\
+
+\bigskip
+El objetivo de este proyecto es desarrollar un sistema compuesto por varios modulos cuyo objetivo final sea interpretar el estado del tráfico actual en una localización concreta mediante terminales ligeros, que se encargan de capturar los datos y transmitirlos para su posterior procesado y representación.
+
+\bigskip
+Tras el desarrollo, el sistema será capaz de identificar cuando pasa un vehículo cerca de la ubicación del dispositivo recolector de datos que a su vez, se encargará de transmitirlo a distintas plataformas para su almacenamiento, consulta y representación. Cabe destacar que el proyecto estará constituido únicamente con software libre lo que ofrece la posibilidad de añadir nuevas funcionalidades por parte de terceros gracias al caracter modular de la aplicación, además de ser una obligación moral debido a que todas las tecnologías usadas que se detallarán más adelante son completamente abiertas.
+
+\bigskip
+El proyecto consta de elementos software y hardware los cuales se detallan a continuación:
+
+\bigskip
+Hardware:
+\begin{itemize}
+	\item Raspberry Pi 2B,
+	\item Tarjeta de sonido USB.
+	\item Micrófono
+	\item Adaptador wifi USB o cable de red RJ45.
+	\item Adaptador de alimentación para la Raspberry Pi.
+	\item Tarjeta SD y memoria USB.
+\end{itemize}
+Software:
+\begin{itemize}
+	\item Sistema de control de versiones para almacenar tanto la información relacionada proyecto como el código.
+	\item Plataforma IOT, que gestiona los dispositivos conectados a el sistema.
+	\item Base de datos, almacena la información recolectada.
+	\item Notebook que permite analizar cantidades masivas de datos almacenadas en la base de datos.
+	\item REST api, la cual recibe las señales de detección de vehículos.
+	\item Web, representa en un mapa las señales recibidas por la api.
+\end{itemize}
+
+\newpage
+\begin{center}
+{\LARGE\bfseries\tituloEng}\\
+\end{center}
+\begin{center}
+\autor\
+\end{center}
+
+\section*{Extended abstract}
+
+\bigskip
+\noindent{\textbf{Palabras clave}: \textit{smart cities}, \textit{real time}, \textit{traffic}, \textit{raspberry pi},\textit{open source}, \textit{data analysis}, \textit{REST api}\\
+
+The main reason to develop a system like RSMap is the innovative related technologies needed to cover a solution. Nowadays Big Data and IOT software and techniques are growing fast as well as the preoccupation for making the cities a better place to live improving several aspects like administrative, eco-friendly, and monetary subjects. The problem that RSMap tries to solve is the perfect scenario to join these topics and technologies in one solution.
+Traffic is an important element which is related to the aspects mentioned above because with an optimal traffic in a city we may reduce pollution, identify noisy zones or get a better traffic flow.
+
+\bigskip
+
+RSMap system allows the end-user to know the actual traffic status through several devices which are capturing the noise generated  by vehicles and interpreting it as signals which are represented in two different ways.
+The \textit{'obvious'} way is to show it on a map so we can see how many vehicles are running on certain street at a certain time.
+
+The second way, much more interesting, is the possibility of watching the massive stored data along the days to perform Big Data analysis operations for example, to use it to configure predictive models.
+
+\bigskip
+The approach of the solution is acquired by 4 main elements.
+
+The first of them are the receptors, They are lightweight computers, (Raspberry Pi in our case). Their purpose is the collector element in RSMap system, they process and send the signals obtained with a microphone to the storage/visualization points.
+
+As middleware platform between receptors and storage RSMap uses KAA IOT which is a great open source platform that manages a lot of devices which task is to generate and simplify the way to allow the receptors to send data to the massive storage.
+
+The third element is the massive storage, RSMap uses Apache Cassandra which is best-in-class database storage system for time series and its conditions of scalability makes it a perfect component to perform the tasks of storage being able to store hundreds of thousands registers per day.
+
+Related to Apache Cassandra, RSMap makes use of Apache Zeppelin which is a very modern (but powerful) tool to visualize the data stored in Apache Cassandra in several ways due to the fact that we can get the data as we want through queries.
+
+To conclude, RSMap has a typical end-point for normal users. A Web site where they can observe the traffic in real time, the receptors send signals when they 'think' that a vehicle passed in front of them.This Web site is developed in Django and Django-Rest-Framework. Django is a great web framework developed in Python to build professional web pages and Django-Rest-Framework is a module which allows the receptors to send detected signals to the web page with POST requests.
+
+
+\bigskip
+At the end, RSMap is a set of technologies and tools assembled to perform traffic detection. However, the possibilities to adapt the system to other purposes are too many thanks to the modular system structure. If we want to catch other kind of environment information we only have to adapt the receptors code and define new models to store the data but the essence of the application would be the same.
+
+\newpage
+\thispagestyle{empty}
+\
+\vspace{3cm}
+
+\noindent\rule[-1ex]{\textwidth}{2pt}\\[4.5ex]
+
+Yo, \textbf{\autor}, alumno de la titulación \textbf{\grado} de la \textbf{\escuela\ de la \universidad}, autorizo la ubicación de la siguiente copia de mi Trabajo Fin de Grado (\textit{\titulo}) en la biblioteca del centro para que pueda ser consultada por las personas que lo deseen.
+
+\bigskip
+Toda la información relacionada con el proyecto se encuentra bajo licencia \textbf{Creative Commons Attribution-ShareAlike 4.0} (\url{https://creativecommons.org/licenses/by-sa/4.0/}), por lo que se permite el uso comercial de la obra y de las posibles obras derivadas, la distribución de las cuales se debe hacer con una licencia igual a la que regula la obra original.
+
+\vspace{4cm}
+
+\noindent Fdo: \autor
+
+\vspace{2cm}
+
+\begin{flushright}
+\ciudad, a \today
+\end{flushright}
+
+\newpage
+\thispagestyle{empty}
+\
+\vspace{3cm}
+
+\noindent\rule[-1ex]{\textwidth}{2pt}\\[4.5ex]
+
+D. \textbf{\tutor}, profesor del \textbf{Departamento de Arquitectura y Tecnología de Computadores} de la \textbf{\universidad}.
+
+\vspace{0.5cm}
+
+\vspace{0.5cm}
+
+\textbf{Informa:}
+
+\vspace{0.5cm}
+
+Que el presente trabajo, titulado \textit{\textbf{\titulo}}, ha sido realizado bajo su supervisión por \textbf{\autor}, y
+autoriza la defensa de dicho trabajo ante el tribunal que corresponda.
+
+\vspace{0.5cm}
+
+Y para que conste, expide y firma el presente informe en \ciudad\ a \today.
+
+\vspace{1cm}
+
+\textbf{El tutor:}
+
+\vspace{5cm}
+
+\noindent \textbf{\tutor}
+
+\chapter*{Agradecimientos}
+\thispagestyle{empty}
+
+\vspace{1cm}
+
+TODO

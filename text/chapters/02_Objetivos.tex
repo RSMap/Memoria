@@ -1,0 +1,41 @@
+\chapter{Objetivos}
+
+El principal objetivo del proyecto es ofrecer una aplicación web que muestre en tiempo real el estado del tráfico gracias a sensores \textit{(Raspberry Pi)} que analizan y envían la información obtenida de manera rápida y eficiente. Otro de los objetivos es ofrecer un almacenamiento robusto, escalable y replicable para manejar las grandes masas de información que se obtienen a lo largo de un día así como una herramienta para poder consultarlos y ofrecerlos de manera libre al público o entidades que deseen acceder a ellos.
+
+\bigskip
+Los objetivos se definen con más detalle a continuación:
+
+\begin{itemize}
+  \item \textbf{O1:} Desarrollar un método que permita reconocer cuando un vehículo ha pasado por la localización en la que el dispositivo recolector se encuentra.
+  \item \textbf{O2:} Desarrollar una aplicación que permita a los usuarios instalar un dispositivo y aportar información del tráfico en el punto que ellos deseen.
+  \item \textbf{O3:} Hacer uso de una base de datos especialmente diseñada para trabajar bajo el paradigma del Big Data.
+  \item \textbf{O4:} Proveer un método fácil de consulta de los datos que el conjunto de dispositivos recolectores obtiene, para que cualquier usuario pueda consultarlos.
+  \item \textbf{O5:} Dotar al sistema de una aplicación web en la que mediante un mapa, se muestren los puntos en los que están pasando vehículos.
+\end{itemize}
+
+\bigskip
+Los aspectos formativos más utilizados son:
+\begin{itemize}
+  \item \textbf{Infraestructuras virtuales}, ya que los servicios usados son en su totalidad virtualizados así como el scripting necesario para la automatización de ciertas tareas.
+  \item \textbf{Sistemas concurrentes}, debido a que al trabajar con dispositivos de un perfil medio-bajo para la recolección se hace necesario el paralelizar ciertas operaciones.
+  \item \textbf{Bases de datos}, un elemento indispensable para tratar el problema que se plantea de almacenamiento de grandes cantidades de datos.
+  \item \textbf{Ingeniería de servidores}, para la configuración de los distintos VPS usados.
+  \item \textbf{Procesamiento digital de señales}, para un correcto entendimiento del análisis del sonido.
+  \item \textbf{Desarrollo de aplicaciones para internet}, para el desarrollo de la plataforma web.
+\end{itemize}
+
+\section{Alcance de los objetivos}
+
+El proyecto ofrecerá dos secciones en las que se podrá visualizar el estado del tráfico mediante un mapa y consultar los valores obtenidos de los dispositivos que se encuentran retransmitiendo información. Además permitirá a cualquier usuario configurar e iniciar su propio receptor para contribuir a la obtención de datos para el sistema.
+
+\bigskip
+En este caso, la aplicación hace uso del módulo desarrollado de detección de tráfico, sin embargo, el ámbito de la aplicación no se cierra exclusivamente a éste propósito ya que debido a su modularidad será posible el desarrollo y acoplamiento de distintos módulos de detección como podrían ser la temperatura, la humedad relativa o la luminosidad ó el análisis de los datos obtenidos mediante con herramientas como Apache Spark por ejemplo, quedando completamente abierto a cualquier modelo que un desarrollador quiera representar, por tanto hablamos de una herramienta completamente personalizable según las necesidades requeridas.
+
+
+\section{Interdependencia de los objetivos}
+
+Los objetivos podríamos alinearlos mentalmente a modo de una piramide inversa, el principal y sobre el que gira este proyecto es \textbf{O1} el cual va a generar la información, sin la cual el resto no tendrían sentido. Por otra parte existe una fuerte relación con \textbf{O2} ya que el mismo módulo encargado de generar la información deberá ser replicable y configurable tantas veces como se desee, de esta manera contribuimos a como se ha mencionado anteriormente, cualquier usuario pueda aportar datos al sistema.
+
+En el siguiente escalón de la pirámide tendríamos \textbf{O3} y \textbf{O4} los cuales también están fuertemente ligados entre sí, ya que de nada nos serviría almacenar toda la información si no proveemos un método fácil para consultarla.
+
+Por último tenemos \textbf{O5}, que al igual que los anteriores necesita consumir información, por tanto su dependencia con \textbf{O1}, es total.
