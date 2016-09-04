@@ -9,7 +9,7 @@ Tanto estructura de éste repositorio, como la automatización para generar el d
 
 
 Documentación realizada con LaTeX, para generar el archivo PDF introducir las siguientes órdenes:
-  
+
 #### Distribuciones basadas en Debian
 ```
 sudo apt-get install texlive texlive-latex-extra texlive-lang-spanish xzdec
@@ -23,3 +23,9 @@ tlmgr install xcolor
 yaourt -S texlive-core texlive-latex-extra
 ./makePDF.sh
 ```
+
+## Tecnologías usadas
+
+Las herramientas utilizadas de forma global en el proyecto se detallan [aquí](https://github.com/RSMap/RSMap#tecnolog%C3%ADas-usadas).
+
+Las tecnologías usadas para la detección de vehículos se encuentra descritas [aquí](https://github.com/RSMap/RSMapPi#technologies).
