@@ -2,6 +2,28 @@
 
 \section{Planificación}
 
+
+
+\subsection{Metodología}
+
+Desde el primer momento se tiene claro que para el desarrollo del proyecto se usará el método de Desarrollo Ágil basado en iteraciones, de éste modo se van obteniendo pequeñas funcionalidades del sistema, descartando las que se consideren prescindibles.
+
+Dentro de cada iteración tenemos unas tareas que cumplir para darla por terminada como podemos observar en la \textit{Figura \ref{fig:met_agil}}, éste método incremental permite que el desarrollo se haga sobre una base sólida evitando modificaciones que afecten al funcionamiento global de la aplicación una vez éste se encuentre en un punto avanzado del desarrollo.
+
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=0.70]{../images/metodologia/agil.png}
+    \caption{Metodología ágil}
+    \label{fig:met_agil}
+  \end{center}
+\end{figure}
+
+
+Por otra parte, es la manera que más natural resulta a la hora de desarrollar software pues se van completano hitos. Cada uno de ellos define una funcionalidad implementada por lo que si se desea abrir un nuevo camino \textit{(también llamados fork o roadmap)} en la aplicación tenemos varios puntos de partida evitando tener que empezar desde cero en caso de llegar a un \textit{punto muerto} en el desarrollo.
+
+http://mprende.co/gesti%C3%B3n/agile-scrum-y-lean-startups-metodolog%C3%ADas-de-desarrollo-%C3%A1gil-de-productos
+
 \subsection{Fases}
 Tomando en consideración que la parte del proyecto referente al análisis del sonido tiene un fuerte componente teórico, se ha dedicado una sección inicial a recabar todo tipo de información relacionada con la materia para obtener una visión global y definir así un enfoque claro antes de empezar a analizar tanto las especificaciones como los requisitos. El resto de las fases son en su mayoría, comunes a cualquier proceso de elaboración de un proyecto de software.
 
@@ -128,13 +150,41 @@ La información acerca de la temporización queda expuesta en las siguientes fig
 \end{figure}
 
 \newpage
-\newpage
 
 \section{Presupuesto}
 
 En el presupuesto podemos distinguir entre el software y el hardware. Por una parte el aspecto software queda totalmente cubierto de manera gratuita ya que todas las tecnologías usadas son de código abierto por tanto esto nos ahorra muchos {\textit{- por no decir todos -} los costes de este tipo.
 
-Por otra parte tenemos el componente hardware, que se detalla a continuación:
+\bigskip
+El proyecto consta de los siguientes elementos software y hardware:
+
+\bigskip
+Hardware:
+\begin{itemize}
+	\item Raspberry Pi 2B,
+	\item Tarjeta de sonido USB.
+	\item Micrófono
+	\item Adaptador wifi USB o cable de red RJ45.
+	\item Adaptador de alimentación para la Raspberry Pi.
+	\item Tarjeta SD y memoria USB.
+\end{itemize}
+
+
+Software:
+\begin{itemize}
+	\item Sistema de control de versiones para almacenar tanto la información relacionada proyecto como el código.
+	\item Módulo de detección y envío de información.
+	\item Plataforma IOT, que gestiona los dispositivos conectados a el sistema.
+	\item Base de datos NoSQL, almacenar´a la información recolectada.
+	\item Notebook que permite analizar cantidades masivas de datos almacenadas en la base de datos.
+	\item REST api, la cual recibe las señales de detección de vehículos.
+	\item Web, representa en un mapa las señales recibidas por la api.
+	\item Servidores, almacenan y ofrecen la información recopilada así como la interfaz para ello.
+\end{itemize}
+
+\bigskip
+
+El precio aproximado del hardware requerido se detalla a continuación:
 
 \newpage
 
@@ -232,7 +282,7 @@ Por otra parte tenemos el componente hardware, que se detalla a continuación:
     \item 1 instancia para el servidor web.
   \end{itemize}
   \item Especificaciónes: \url{https://aws.amazon.com/es/ec2/instance-types/}
-  \item Precio: Este tipo de servidores son gratuitos en amazon EC2 durante un año, por lo que no existe coste a priori.
+  \item Precio: Este tipo de servidores son gratuitos en amazon EC2 durante un año, por lo que no existe coste computable a priori.
  \end{itemize}
 \end{itemize}
 
