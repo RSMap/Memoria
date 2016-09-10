@@ -8,36 +8,23 @@
 \section*{Resumen}
 
 \bigskip
-\noindent{\textbf{Palabras clave}: \textit{smart cities}, \textit{tiempo real}, \textit{tráfico}, \textit{raspberry pi},\textit{software libre}, \textit{análisis de datos}, \textit{REST api}\\
+\noindent{\textbf{Palabras clave}: \textit{smart cities}, \textit{tiempo real}, \textit{tráfico}, \textit{sensores}, \textit{análisis de datos}, \textit{software libre}\\
+
+RSMap es un conjunto de tecnologías que trabajan en conjunto con el propósito de ofrecer información en tiempo real del estado del tráfico.
 
 \bigskip
-El objetivo de este proyecto es desarrollar un sistema compuesto por varios modulos cuyo objetivo final sea interpretar el estado del tráfico actual en una localización concreta mediante terminales ligeros, que se encargan de capturar los datos y transmitirlos para su posterior procesado y representación.
+La información es recolectada por sensores situados cerca de cualquier ruta por la que pasen vehículos.
+
+Éstos dispositivos filtran mediante micrófonos el sonido ambiente de la localización en la que se encuentran y remiten la información a los elementos que conforman la parte visual y de almacenamiento de RSMap.
 
 \bigskip
-Tras el desarrollo, el sistema será capaz de identificar cuando pasa un vehículo cerca de la ubicación del dispositivo recolector de datos que a su vez, se encargará de transmitirlo a distintas plataformas para su almacenamiento, consulta y representación. Cabe destacar que el proyecto estará constituido únicamente con software libre lo que ofrece la posibilidad de añadir nuevas funcionalidades por parte de terceros gracias al caracter modular de la aplicación, además de ser una obligación moral debido a que todas las tecnologías usadas que se detallarán más adelante son completamente abiertas.
+
+En RSMap los dispositivos recolectores envían las señales de detección de vehículos a una plataforma web mediante una API Rest. Ésta web representará las señales enviadas sobre un mapa en tiempo real permitiendo a un usuario saber en qué puntos existe tráfico. La información almacenada aquí tiene caracter temporal pues, una vez representada sobre el mapa ya no es útil pero dado que se han invertido una serie de recursos en la recolección y procesado de dicha información, ésta es aprovechada para otros propósitos.
 
 \bigskip
-El proyecto consta de elementos software y hardware los cuales se detallan a continuación:
+En este punto RSMap se sirve de herramientas orientadas al Big Data, guardando la información obtenida en una base de datos especialmente diseñada para almacenar millones de registros.
 
-\bigskip
-Hardware:
-\begin{itemize}
-	\item Raspberry Pi 2B,
-	\item Tarjeta de sonido USB.
-	\item Micrófono
-	\item Adaptador wifi USB o cable de red RJ45.
-	\item Adaptador de alimentación para la Raspberry Pi.
-	\item Tarjeta SD y memoria USB.
-\end{itemize}
-Software:
-\begin{itemize}
-	\item Sistema de control de versiones para almacenar tanto la información relacionada proyecto como el código.
-	\item Plataforma IOT, que gestiona los dispositivos conectados a el sistema.
-	\item Base de datos, almacena la información recolectada.
-	\item Notebook que permite analizar cantidades masivas de datos almacenadas en la base de datos.
-	\item REST api, la cual recibe las señales de detección de vehículos.
-	\item Web, representa en un mapa las señales recibidas por la api.
-\end{itemize}
+Además RSMap incluye otra forma de visualización, que permite consultar los datos almacenados de manera masiva a lo largo del tiempo para su análisis y estudio permitiendo así, la posibilidad de optimizar el tráfico de ciudades o carreteras, ver que rutas tienen más afluencia o hacer una estimación de el caudal de vehículos que circulará por una vía en un día.
 
 \newpage
 \begin{center}
@@ -73,7 +60,7 @@ The third element is the massive storage, RSMap uses Apache Cassandra which is b
 
 Related to Apache Cassandra, RSMap makes use of Apache Zeppelin which is a very modern (but powerful) tool to visualize the data stored in Apache Cassandra in several ways due to the fact that we can get the data as we want through queries.
 
-To conclude, RSMap has a typical end-point for normal users. A Web site where they can observe the traffic in real time, the receptors send signals when they 'think' that a vehicle passed in front of them.This Web site is developed in Django and Django-Rest-Framework. Django is a great web framework developed in Python to build professional web pages and Django-Rest-Framework is a module which allows the receptors to send detected signals to the web page with POST requests.
+To conclude, RSMap has a typical end-point for normal users. A Web site where they can observe the traffic in real time, the receptors send signals when they 'think' that a vehicle passed in front of them.This Web site is developed in Django and Django-Rest-Framework. Django is a great web framework developed in Python to build professional web pages and Django-Rest-Framework is a module which allows the receptors to send detected signals to the web page with POST/PATCH/PUT/DELETE requests.
 
 
 \bigskip
