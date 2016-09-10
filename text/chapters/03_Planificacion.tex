@@ -2,28 +2,6 @@
 
 \section{Planificación}
 
-
-
-\subsection{Metodología}
-
-Desde el primer momento se tiene claro que para el desarrollo del proyecto se usará el método de Desarrollo Ágil basado en iteraciones, de éste modo se van obteniendo pequeñas funcionalidades del sistema, descartando las que se consideren prescindibles.
-
-Dentro de cada iteración tenemos unas tareas que cumplir para darla por terminada como podemos observar en la \textit{Figura \ref{fig:met_agil}}, éste método incremental permite que el desarrollo se haga sobre una base sólida evitando modificaciones que afecten al funcionamiento global de la aplicación una vez éste se encuentre en un punto avanzado del desarrollo.
-
-
-\begin{figure}[!ht]
-  \begin{center}
-    \includegraphics[scale=0.70]{../images/metodologia/agil.png}
-    \caption{Metodología ágil}
-    \label{fig:met_agil}
-  \end{center}
-\end{figure}
-
-
-Por otra parte, es la manera que más natural resulta a la hora de desarrollar software pues se van completano hitos. Cada uno de ellos define una funcionalidad implementada por lo que si se desea abrir un nuevo camino \textit{(también llamados fork o roadmap)} en la aplicación tenemos varios puntos de partida evitando tener que empezar desde cero en caso de llegar a un \textit{punto muerto} en el desarrollo.
-
-http://mprende.co/gesti%C3%B3n/agile-scrum-y-lean-startups-metodolog%C3%ADas-de-desarrollo-%C3%A1gil-de-productos
-
 \subsection{Fases}
 Tomando en consideración que la parte del proyecto referente al análisis del sonido tiene un fuerte componente teórico, se ha dedicado una sección inicial a recabar todo tipo de información relacionada con la materia para obtener una visión global y definir así un enfoque claro antes de empezar a analizar tanto las especificaciones como los requisitos. El resto de las fases son en su mayoría, comunes a cualquier proceso de elaboración de un proyecto de software.
 
@@ -39,7 +17,7 @@ Tomando en consideración que la parte del proyecto referente al análisis del s
 \newpage
 \subsection{Definición y estimación de tiempo para las tareas de cada fase}
 
-Las fases detalladas anteriormente tienen varias tareas como sub-elementos, en la siguiente lista se detalla dichos sub-elementos y la estimación aproximada para llevarla a cabo.
+Las fases detalladas anteriormente tienen varias tareas como sub-elementos, en la siguiente lista se detalla dichos sub-elementos y la estimación aproximada para llevarla a cabo. En la última línea de cada tarea se indica el total en horas aproximado dedicado al subconjunto de tareas.
 
 \begin{itemize}
    \item \textbf{Lecturas relacionadas con la materia del proyecto:}
@@ -48,7 +26,8 @@ Las fases detalladas anteriormente tienen varias tareas como sub-elementos, en l
     \item Muestreo de señales.
     \item Digitalización de señales.
     \item Identificación de patrones en señales.
-    \item \underline{\textit{Duración aproximada}}: 10 días.
+    \item \underline{\textit{Duración estimada}}: 10 días, 30 horas.
+    \item \underline{\textit{Duración requerida}}: 10 días, 40 horas.
     \end{itemize}
 \end{itemize}
 
@@ -59,7 +38,8 @@ Las fases detalladas anteriormente tienen varias tareas como sub-elementos, en l
     \item Fases.
     \item Tareas y temporización.
     \item Presupuesto.
-    \item \underline{\textit{Duración aproximada:}} 4 días.
+    \item \underline{\textit{Duración estimada:}} 4 días, 30 horas.
+    \item \underline{\textit{Duración requerida:}} 4 días, 24 horas.
    \end{itemize}
 \end{itemize}
 
@@ -68,7 +48,8 @@ Las fases detalladas anteriormente tienen varias tareas como sub-elementos, en l
    \begin{itemize}
     \item Análisis de requisitos.
     \item Diagramas de la aplicación.
-    \item \underline{\textit{Duración aproximada:}} 20 días.
+    \item \underline{\textit{Duración estimada:}} 20 días, 86 horas.
+    \item \underline{\textit{Duración requerida:}} 20 días, 80 horas.
    \end{itemize}
 \end{itemize}
 
@@ -84,7 +65,8 @@ Las fases detalladas anteriormente tienen varias tareas como sub-elementos, en l
   \item Configuración de visualizador de los datos recolectados.
   \item Desarrollo de sistema que comunique cuando un vehículo es detectado a la plataforma web.
   \item Desarrollo de la plataforma web
-  \item \underline{\textit{Duración aproximada:}} 60 días.
+  \item \underline{\textit{Duración estimada:}} 60 días, 300 horas.
+  \item \underline{\textit{Duración requerida:}} 60 días, 216 horas.
  \end{itemize}
 \end{itemize}
 
@@ -97,7 +79,8 @@ Cabe destacar que al ser un proyecto en el que existen fuertes dependencias entr
   \item Pruebas de escritura en base de datos.
   \item Pruebas de lectura de la base de datos.
   \item Pruebas de comunicación entre dispositivos y plataforma web.
-  \item \underline{\textit{Duración aproximada:}} 60 días.
+  \item \underline{\textit{Duración estimada:}} 60 días, 120 horas.
+  \item \underline{\textit{Duración requerida:}} 60 días, 168 horas.
  \end{itemize}
 \end{itemize}
 
@@ -108,13 +91,34 @@ La documentación al igual que las pruebas, ha ido desarrollándose al mismo tie
  \begin{itemize}
   \item Documentación del código.
   \item Documentación del proyecto.
-  \item \underline{\textit{Duración aproximada:}} 60 días.
+  \item \underline{\textit{Duración estimada:}} 60 días, 80 horas.
+  \item \underline{\textit{Duración requerida:}} 96 horas.
  \end{itemize}
 \end{itemize}
 
+\bigskip
+
+Los resultados nos muestran que en el conjunto de Implementación, Pruebas y Documentación se ha invertido un 76% del tiempo total dentro del cual se ha distribuido de la siguiente forma:
+
+\begin{itemize}
+  \item \textbf{Implementación: }45\%.
+  \item \textbf{Pruebas: }20\%.
+  \item \textbf{Documentación: }35\%.
+\end{itemize}
+
+Mientras que la estimación inicial suponia un:
+
+\begin{itemize}
+  \item \textbf{Implementación: }50\%.
+  \item \textbf{Pruebas: }30\%.
+  \item \textbf{Documentación: }20\%.
+\end{itemize}
+
+Las tareas cuyo trabajo han requerido más tiempo del calculado han sido la Documentación, Pruebas y las Lecturas relacionadas con la materia del proyecto. Por el contrario en las tareas de Especificaciones y Planificación, Análisis y Diseño e Implementación los tiempos se han visto reducidos.
+
 \subsection{Diagramas de temporización}
 
-La información acerca de la temporización queda expuesta en las siguientes figuras mediante un diagrama de fases y tareas \textit{(figura 3.1)}, un diagrama de pert \textit{(figura 3.2)} y otro de gantt \textit{(figura 3.3)} y \textit{(figura 3.4)}.
+La información acerca de la temporización queda expuesta en las siguientes figuras mediante un diagrama de Fases y Tareas \textit{(figura 3.1)}, un diagrama de PERT \textit{(figura 3.2)} y otro de GANTT \textit{(figura 3.3)} y \textit{(figura 3.4)}.
 
 \begin{figure}[!ht]
   \begin{center}
@@ -182,11 +186,28 @@ Software:
 	\item Servidores, almacenan y ofrecen la información recopilada así como la interfaz para ello.
 \end{itemize}
 
+\newpage
+
+Los servidores utilizados tienen las siguientes características:
+
+\begin{itemize}
+ \item \textbf{VPS Amazon EC2}
+ \begin{itemize}
+  \item Descripción: Conjunto de servidores que conforman el proyecto, de tipo \textbf{t2.micro}
+  \begin{itemize}
+    \item 1 instancia para la plataforma IOT.
+    \item 1 instancia para la base de datos de almacenamiento masivo.
+    \item 1 instancia para el visualizador de datos.
+    \item 1 instancia para el servidor web.
+  \end{itemize}
+  \item Especificaciónes: \url{https://aws.amazon.com/es/ec2/instance-types/}
+  \item Precio: Este tipo de servidores son gratuitos en amazon EC2 durante un año, por lo que no existe coste computable a priori.
+ \end{itemize}
+\end{itemize}
+
 \bigskip
 
 El precio aproximado del hardware requerido se detalla a continuación:
-
-\newpage
 
 \begin{itemize}
  \item \textbf{Raspberry Pi}
@@ -203,6 +224,8 @@ El precio aproximado del hardware requerido se detalla a continuación:
     \label{fig:rpi}
   \end{center}
 \end{figure}
+
+\newpage
 
 \begin{itemize}
  \item \textbf{Tarjeta de audio USB}
@@ -238,6 +261,8 @@ El precio aproximado del hardware requerido se detalla a continuación:
 
 \bigskip
 
+\newpage
+
 \begin{itemize}
  \item \textbf{Tarjeta SD (4GB)}
  \begin{itemize}
@@ -270,20 +295,5 @@ El precio aproximado del hardware requerido se detalla a continuación:
     \label{fig:soundcard}
   \end{center}
 \end{figure}
-
-\begin{itemize}
- \item \textbf{VPS Amazon EC2}
- \begin{itemize}
-  \item Descripción: Conjunto de servidores que conforman el proyecto, de tipo \textbf{t2.micro}
-  \begin{itemize}
-    \item 1 instancia para la plataforma IOT.
-    \item 1 instancia para la base de datos de almacenamiento masivo.
-    \item 1 instancia para el visualizador de datos.
-    \item 1 instancia para el servidor web.
-  \end{itemize}
-  \item Especificaciónes: \url{https://aws.amazon.com/es/ec2/instance-types/}
-  \item Precio: Este tipo de servidores son gratuitos en amazon EC2 durante un año, por lo que no existe coste computable a priori.
- \end{itemize}
-\end{itemize}
 
 Por tanto, por un total de unos 65 Euros aproximadamente podemos disponer de todo lo necesario para construir el proyecto.

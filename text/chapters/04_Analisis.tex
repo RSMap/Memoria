@@ -1,5 +1,27 @@
 \chapter{Análisis}
 
+\subsection{Metodología}
+
+Desde el primer momento se tiene claro que para el desarrollo del proyecto se usará el método de Desarrollo Ágil basado en iteraciones, de éste modo se van obteniendo pequeñas funcionalidades del sistema, descartando las que se consideren prescindibles.
+
+Dentro de cada iteración tenemos unas tareas que cumplir para darla por terminada como podemos observar en la \textit{Figura \ref{fig:met_agil}}, éste método incremental permite que el desarrollo se haga sobre una base sólida evitando modificaciones que afecten al funcionamiento global de la aplicación una vez éste se encuentre en un punto avanzado del desarrollo.
+
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=0.70]{../images/metodologia/agil.png}
+    \caption{Metodología ágil}
+    \label{fig:met_agil}
+  \end{center}
+\end{figure}
+
+
+Por otra parte, es la manera que más natural resulta a la hora de desarrollar software pues se van completano hitos. Cada uno de ellos define una funcionalidad implementada por lo que si se desea abrir un nuevo camino \textit{(también llamados fork o roadmap)} en la aplicación tenemos varios puntos de partida evitando tener que empezar desde cero en caso de llegar a un \textit{punto muerto} en el desarrollo.
+
+Las iteraciones se llevan acabo sobre las tareas de Implemetación, pruebas y documentación las cuales se detallan más abajo en éste capítulo.
+
+http://mprende.co/gesti%C3%B3n/agile-scrum-y-lean-startups-metodolog%C3%ADas-de-desarrollo-%C3%A1gil-de-productos
+
 \section{Análisis de requisitos}
 
 A continuación se detallan los actores implicados en el sistema, requisitos funcionales y no funcionales, requisitos de almacenamiento, casos de uso y por último los diagramas generados para el desarrollo incluyendo en éste punto los bocetos ilustrativos de interfaz de la web.
@@ -15,7 +37,7 @@ El \textbf{administrador} es el encargado de mantener el correcto funcionamiento
 El \textbf{aportador de información} puede ser cualquier usuario que decida configurar un dispositivo para añadir información, en éste caso creando un punto que recolecte datos y los remita al sistema.
 
 \bigskip
-El \textbf{usuario visitante} puede ser cualquier persona que consulte información almacenada en la aplicación, ya sea a través de la web o através del sistema para consultar todos los datos almacenados (en éste último caso el usuario debe tener un mínimo de conocimientos acerca de las consultas necesarias para obtener la información).
+El \textbf{usuario visitante} puede ser cualquier persona que consulte información en la aplicación, ya sea a través de la web o através de la plataforma para consultar todos los datos almacenados (en éste último caso el usuario debe tener un mínimo de conocimientos acerca de las consultas necesarias para obtener la información).
 
 \subsection{Requisitos funcionales}
 
@@ -24,15 +46,17 @@ En ésta sección se describen las funcionalidades básicas que el sistema debe 
 \begin{itemize}
   \item \textbf{RF-1.} Mapa web:
     \begin{itemize}
-    \item \textbf{RF-1.1.} Desplegar la aplicación web.
-	\item \textbf{RF-1.2.} Leer datos recibidos desde los clientes.
+      \item \textbf{RF-1.1.} Desplegar la aplicación web.
+      \item \textbf{RF-1.2.} Leer datos recibidos desde los clientes.
+      \item \textbf{RF-1.2.} Mostrar los datos sin necesidad de refrescar la página.
     \end{itemize}
 \end{itemize}
 
 \begin{itemize}
   \item \textbf{RF-2.} Acceso libre a la información almacenada:
     \begin{itemize}
-    \item \textbf{RF-2.1.} Proveer un sistema que sea capaz de mostrar los datos almacenados y filtrarlos según la conveniencia.
+      \item \textbf{RF-2.1.} Proveer un sistema que sea capaz de mostrar los datos almacenados y filtrarlos según la conveniencia.
+      \item \textbf{RF-2.2.} Proveer un sistema que sea capaz de extraer la información consultada.
     \end{itemize}
 \end{itemize}
 
@@ -40,35 +64,30 @@ En ésta sección se describen las funcionalidades básicas que el sistema debe 
   \item \textbf{RF-3.} Añadir información:
     \begin{itemize}
     \item \textbf{RF-3.1.} Un usuario podrá aportar información al sistema de manera independiente y autónoma.
-    \end{itemize}
+  \end{itemize}
 \end{itemize}
 
 \begin{itemize}
   \item \textbf{RF-3.} Identificación de vehículos:
     \begin{itemize}
     \item \textbf{RF-3.1.} Filtrar la información entrante en forma de sonido e identificar si se trata de tráfico.
+    \item \textbf{RF-3.2.} Hacer una distinción según el tipo de vehículo.
+    \item \textbf{RF-3.3.} Si el dispositivo recolector se queda sin conexión, debe ser capaz de seguir almacenando los datos obtenidos y enviarlos cuando le sea posible.
     \end{itemize}
 \end{itemize}
 
-\begin{itemize}
-  \item \textbf{RF-4.} Receptores sin conexión:
-    \begin{itemize}
-    \item \textbf{RF-4.1.} Si el dispositivo recolector se queda sin conexión, debe ser capaz de seguir almacenando los datos obtenidos y enviarlos cuando le sea posible.
-    \end{itemize}
-\end{itemize}
 
 \subsection{Requisitos no funcionales}
 
 Aquí se enumeran las propiedades ligadas al desarrollo e implementación que el sistema debe cumplir.
 
 \begin{itemize}
-  \item \textbf{RNF-0.} El software de terceros usado debe ser open source, así como los SO usados tanto para los servidores como para la raspberry pi.
+  \item \textbf{RNF-0.} El software de terceros usado debe ser Open Source, así como los SO usados tanto para los servidores como para la Raspberry Pi.
   \item \textbf{RNF-1.} El módulo encargado de la detección del sonido estará desarrollado en {\tt Python} (por su simplicidad), las dependencias necesarias se detallarán en la sección de implementación. Además éste módulo debe aprovechar el procesamiento en paralelo para que su funcionamiento sea óptimo.
-  \item \textbf{RNF-2.} La retransmisión de datos debe ser establecida en un intervalo de tiempo mínimo para garantizar que la aplicación actua en tiempo real.
-  \item \textbf{RNF-3.} El mapa web debe mostrar la información durante un breve periodo de tiempo para no acumular señales anteriores en el tiempo.
-  \item \textbf{RNF-4.} Siempre que sea posible se automatizarán las interacciones con el sistema mediante scripts.
-  \item \textbf{RNF-5.} Los usuarios que deseen aportar información deberán configurar una serie de parámetros para el correcto funcionamiento y detección del tráfico.
-  \item \textbf{RNF-6.} El código de la aplicación debe estar disponible en algún sistema de control de versiones y de manera pública.
+  \item \textbf{RNF-2.} La retransmisión de datos debe ser establecida en un intervalo de tiempo mínimo para garantizar que la aplicación actúa en tiempo real.
+  \item \textbf{RNF-3.} El mapa web debe mostrar la información durante un breve periodo de tiempo para no acumular señales anteriores.
+  \item \textbf{RNF-4.} Siempre que sea posible se automatizarán las interacciones con cualquier elemento del sistema mediante scripts.
+  \item \textbf{RNF-5.} El código de la aplicación debe estar disponible en algún sistema de control de versiones y de manera pública.
 \end{itemize}
 
 \subsection{Requisitos de almacenamiento}
@@ -78,9 +97,9 @@ La información que se almacenará en el sistema se puede dividir en dos apartad
 \begin{itemize}
   \item \textbf{RA-1.} Almacenamiento para la web.
   \begin{itemize}
-    \item Id del dispositivo.
     \item Timestamp de la señal recibida.
     \item Coordenadas de la señal recibida.
+    \item Valor (numérico) de la señal recibida.
   \end{itemize}
   \item \textbf{RA-2.} Almacenamiento de datos masivo.
   \begin{itemize}
@@ -90,6 +109,12 @@ La información que se almacenará en el sistema se puede dividir en dos apartad
     \item Valor de la señal.
   \end{itemize}
 \end{itemize}
+
+Obsérvese que no se almacena ningún dato personal luego a efectos prácticos, los artículos 7 y 8 de la LOPD en los que se detalla el tipo de datos de carácter sensible que hay que preservar con especial atención no tienen aplicación sobre RSMap.
+
+http://www.boe.es/buscar/pdf/1999/BOE-A-1999-23750-consolidado.pdf#page=4&zoom=auto,-107,226
+
+\newpage
 
 \section{Casos de uso}
 
