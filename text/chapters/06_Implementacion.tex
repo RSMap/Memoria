@@ -7,7 +7,7 @@ A continuación se detallan la instalación, configuración así como el desarro
 	\item Instalación y configuración de Raspberry Pi.
 	\item Instalación y configuración de KAA.
 	\item Instalación y configuración de Apache Cassandra.
-	\item Desarrollo del módulo de sonido.
+	\item Desarrollo del módulo de detección de vehículos.
 	\item Desarrollo de la plataforma web.
 	\item Instalación y configuración de Apache Zeppelin.
 \end{itemize}
@@ -695,13 +695,562 @@ Por último pulsamos la opción \textit{Generate SDK} la cual nos muestra una ve
 
 \newpage
 
-\section{Desarrollo del módulo de sonido.}
-TO CLEAN AND INSERT HERE
+\section{Desarrollo del módulo de detección de vehículos.}
+
+El código completo de éste módulo se encuentra en el repositorio \url{https://github.com/RSMap/RSMapPi}, dentro de la organización \url{https://github.com/RSMap} que alberga el proyecto RSMap completo.
+
+\bigskip
+
+Para analizar la estructura podemos hacer una clara división en dos partes, por un lado tenemos el módulo en python que se encarga de interactuar con la tarjeta de sonido, tomar los datos y enviarlos. La segunda parte es el módulo en java que se encarga de usar el SDK generado en KAA para enviarlos a Cassandra.
+
+\subsection{Módulo de detección}
+
+Para detallarlo de una manera clara se analizarán fragmentos de código separadamente, aunque todos ellos pertenecen al mismo archivo \textit{(RSMapPi/\/analyzer/\/VehicleDetection.py)} pero antes a modo de resumen se enumeran las librerías más reseñables y la secuencia que sigue el programa a lo largo de su ejecución.
+
+\subsubsection{Dependencias}
+
+Las dependencias externas y necesarias de éste módulo se encuentran especificadas en el archivo \textit{(RSMapPi/\/analyzer/\/requirements.txt)}. Las más importantes son:
+
+\begin{itemize}
+	\item \textbf{sounddevice==0.3.4:} es la más importante ya que mediante ella se accede al dispositivo para capturar los datos. Hay que destacar que los ejemplos de su documentación han sido de gran ayuda a la hora del desarrollo de éste módulo.
+	\item \textbf{numpy==1.11.1:} es la librería por excelencia para el análisis científico de datos en Python.
+	\item \textbf{requests==2.11.1:} nos proporciona una cómoda interfaz para efectuar peticiones HTTP que serán usadas para interactuar con la API Rest.
+\end{itemize}
+
+\newpage
+
+Además se han usado algunas otras dependencias pertenecientes a python, su instalación no es necesaria pues vienen con el compilador del lenguaje, ellas son:
+
+\begin{itemize}
+	\item \textbf{queue:} contine la estuctura de datos de cola, sobre la que se insertaran y leerán los datos obtenidos.
+	\item \textbf{threading:} nos permite crear hebras y procesos.
+	\item \textbf{socket:} nos servirá para enviar los datos obtenidos desde Python al SDK de KAA que, recordemos que está en Java.
+\end{itemize}
+
+\bigskip
+
+\subsubsection{Resumen de ejecución}
+
+\bigskip
+
+En primer lugar se realiza una petición a la API para dar de alta el dispositivo en la lista de los receptores que se encuentran enviando datos. Si esa petición nos devuelve el código 400 significa que ese dispositivo ya se encuentra dado de alta, por lo que en ese caso vamos a realizar otra petición, ésta vez sobre la ruta asignada a ese dispositivo en concreto para indicar que el dispositivo se ha conectado y empezará a retransmitir datos en breve. En caso de que el dispositivo no exista, se da de alta con el payload que contiene toda la información asociada a el.
+
+\bigskip
+
+Una vez el dispositivo se identifica mediante la API, se abre un socket sobre el mismo equipo (localhost), éste servirá para enviar los datos obtenidos desde Python a Java. Los dos primeros mensajes que se envían son la cadena de localización del dispositivo y su identificador.
+
+\bigskip
+
+A continuación se definen una serie de variables que serán usadas para la detección y análisis del tráfico.
+Tras ésto se lanzan dos hebras, una trabajará con la función \textit{producer} y la otra con la función \textit{consumer}.
+
+\bigksip
+
+La hebra \textit{producer} hace uso de la librería \textbf{Sound device} a la que llama con los parámetros definidos anteriormente, el más destacable es callback, que hace referencia a la función \textit{callback} la cual tiene el cometido generar los bloques con los datos numéricos extraidos desde la tarjeta de sonido y ponerlos en la cola.
+\bigskip
+
+La hebra \textit{consumer} es la encargada de analizar la información puesta en la cola y enviar las señales tanto al SDK (valores que se almacenarán) como a la API Rest (valores que se representarán en el mapa). Cuando el programa recibe una señal de interrupción (\textit{enter, 'q' o 'Q'}) el productor pondrá en la cola un objeto de llamado \textit{\_sentinel} el cual le indicará al consumidor que el programa va a finalizar. El consumidor envía las señales de parada a la API Rest, que borrará el dispositivo de la lista de dispositivos retransmitiendo así como al programa en Java que cerrará la conexión con Cassandra.
+
+\newpage
+\subsubsection{Código}
+
+Al comienzo del fichero se definen una serie de variables que serán usadas cuando el dispositivo envíe información. Gracias a ellas éste quedará identificado por un id (\textit{device\_id}), una localización en formato texto (\textit{device\_location}) y una localización geográfica (\textit{latitude y longitude}).
+
+A continuación se generan los payloads iniciales que se usarán para realizar las peticiones sobre la API, éstos tiene estructura de map \{'clave' : valor\} y tenemos dos tipos:
+
+\begin{itemize}
+	\item \textbf{new\_device\_payload:}
+
+	contiene toda la información asociada al dispositivo, es usado cuando el dispositivo no está registrado en la plataforma web.
+	\item \textbf{existing\_device\_payload:}
+
+	contiene únicamente el nivel iniciado a -1, ésto permitira identificarlo como nuevo dispositivo y representarlo en el mapa con un icono que indique una nueva conexión.
+\end{itemize}
+
+En la parte final de éste bloque se definen las URLS que se necesitarán para comprobar el estado del dispositivo en el sistema.
+
+\begin{itemize}
+	\item \textbf{signals\_list\_url: }
+
+	referencia a la url que contiene todos los dispositivos registrados.
+	\item \textbf{signal\_url: }
+
+	referencia a la url que identifica un dispositivo en concreto.
+\end{itemize}
+
+\begin{lstlisting}[language=python,caption={Parámetros usados para la comunicación con la API},label={lst:pi1}]
+	# device id (case sensitive)
+	device_id = 'TFGDevice'
+	# device location (name)
+	device_location = 'Avda Dilar'
+	# device coordinates
+	latitude = '37.177336'
+	longitude = '-3.598557'
+	# signal_type (default unknown)
+	signal_type = 'u'
+	# level -1 means device is connected and it will send data soon.
+	level = '-1.0'
+	# new_device_payload contains all related info with a map structure
+	new_device_payload = {'device_id':device_id, 'lat':latitude, 'long':longitude, 'level':level, 'type':signal_type}
+	# if device exists, only level is needed
+	existing_device_payload = {'level': level}
+	# rest urls
+	signals_list_url = 'http://52.210.3.41/api/signals/'
+	signal_url = 'http://52.210.3.41/api/signal/'+device_id+'/'
+\end{lstlisting}
+
+El siguiente bloque se encarga de hacer uso de las URL's y Payloads definidos anteriormente
+
+\begin{lstlisting}[language=python,caption={Identificación de dispositivo mediante la API},label={lst:pi1}]
+# rest first request
+req = requests.post(signals_list_url, new_device_payload)
+
+# check rest response
+if(req.status_code == 400):
+    print("Device already exists, sending connect signal")
+    req = requests.patch(signal_url, existing_device_payload)
+    if(req.status_code == 200):
+        print("Connection successful")
+    else:
+        print("Can't send connected signal, exiting")
+        sys.exit()
+elif(req.status_code == 201):
+    print("Connection successful, device added to device's database")
+else:
+    print("Device can't connect to rest service, check your connection.")
+    sys.exit()
+\end{lstlisting}
+
+Cuando realizamos una petición HTTP obtenemos un valor numérico que nos indica el resultado de dicha petición. En base a los códigos obtenidos podemos saber si el dispositivo se encontraba dado de alta, por lo que no se puede sobreescribir con una petición POST (\textit{código 400}) o por el contrario si se añadió satisfactoriamente (\textit{código 201}).
+
+En el caso de no poder realizar la petición POST usamos la petición PATCH que básicamente es un \textit{update} sobre el objeto en Django que contiene la información del dispositivo, es aquí donde se usa la URL definida en la variable \textit{signal\_url} que hace referencia directa al dispositivo en cuestión.
+
+En cualquier caso, el campo \textit{level} será establecido a -1, lo que sobre el mapa se traducirá en el icono de conexión.
+
+\newpage
+
+El siguiente paso es conectarse al Socket creado por \textit{DataSender.java} que deberá estar lanzado y esperando conexiones.
+
+\begin{lstlisting}[language=python,caption={Conexión con Java mediante un Socket},label={lst:pi1}]
+	# Connecting to DataSender socket on localhost
+	socket = socket.socket()
+	socket.connect(('localhost', 5000))
+	# Send device location
+	device_location_sock = device_location+"\n"
+	device_location_bytes = bytes(device_location_sock, 'utf-8')
+	socket.send(device_location_bytes)
+	# Send device id
+	device_id_sock = device_id+"\n"
+	device_id_bytes = bytes(device_id_sock, 'utf-8')
+	socket.send(device_id_bytes)
+\end{lstlisting}
+
+Se le envían dos mensajes iniciales que contienen la cadena de localización y el id del dispositivo los cuales serán usados a posteriori por \textit{DataSender.java} para añadirlos a Cassandra. No se puede pasar una cadena como tal, es por eso por lo que se convierten en Bytes antes de enviarlos.
+
+\bigskip
+
+Ahora se definen las variables necesarias para la captura e identificación de vehículos.
+
+\begin{lstlisting}[language=python,caption={Variables corresopndientes al análisis},label={lst:pi1}]
+ # multiplier factor
+ gain = 10
+  # number of cuantization levels
+ levels = 100
+ # system device id
+ device = 2
+ # block time (ms)
+ block_duration = 100
+ # sample rate
+ samplerate = 44100
+ # high sample rate
+ high = 2000
+ # low sample rate
+ low = 450
+ # cuantization value
+ delta_f = (high - low) / levels
+ # window will divided in bands, fftsize defines the resolution on freq domain
+ fftsize = np.ceil(samplerate / delta_f).astype(int)
+ # window freq resolution
+ low_bin = np.floor(low / delta_f)
+ # vehicle threshold
+ threshold = 0.59
+ # consequtive blocks, its may depend of the road conditions
+ consequtive_blocks = 50
+\end{lstlisting}
+
+Las variables \texit{threshold} y \texit{consequtive\_blocks} tienen relación directa con la identificación de vehículos. La primera indica el umbral mínimo que deben tener los valores obtenidos por cada bloque obtenido mientras que la segunda indica qué número de bloques necesitamos por encima de ese umbral para considerar que un vehículo ha pasado.
+
+El resto poseen la misma estructura que las del ejemplo que proporciona la librería \textit{SoundDevice} para cuantizar los valores obtenidos através de una entrada de audio. ( \url{http://python-sounddevice.readthedocs.io/en/0.3.4/examples.html#real-time-text-mode-spectrogram} )
+
+
+\bigskip
+
+La esencia de la hebra productora es la llamada a \textbf{InputStream} que abre un canal de comunicación con la tarjeta de sonido. Toma como argumentos los valores definidos anteriormente y una función llamada \textit{callback}, que es la encargada de generar cada bloque y ponerlo en la cola. Cada bloque consta de una serie de valores que tras aplicarle la Transformada Rápida de Fourier son sumados obtenieno así el valor global para cada bloque.
+
+\begin{lstlisting}[language=python,caption={Hebra productora},label={lst:pi1}]
+with sd.InputStream(
+	device=device,
+	channels=1,
+	callback=callback,
+	blocksize=int(samplerate * block_duration / 1000),
+	samplerate=samplerate
+)
+\end{lstlisting}
+
+\bigskip
+
+El código perteneciente a la hebra consumidora consiste en un bloque que se ejecuta mientras no obtenga una señal de parada, en tal caso se envía una señal de desconexión a la API usando el método DELETE que eliminará el modelo asociado al dispositivo en Django y otra a \textit{DataSender.java}. El código encargado de filtrar los datos es el siguiente:
+
+\begin{lstlisting}[language=python,caption={Hebra consumidora},label={lst:pi1}]
+if(data > threshold ):
+	# global block consequtive count
+	consequtive += 1
+	local_consequtive += 1
+	local_data_sum += data
+	if(local_consequtive == consequtive_blocks):
+		# if detected > consequtive_blocks send to api rest
+		existing_device_payload = {
+			'level': str(local_data_sum)
+		}
+		req = requests.patch(signal_url, existing_device_payload)
+
+		print(
+			str(consequtive_blocks) +
+			" consequtive blocks, sending to rest API "
+			+ str(local_data_sum)
+			)
+		local_consequtive = 0
+		local_data_sum = 0.0
+
+		# add representative values to send_queue
+		send_queue.put(data)
+else:
+	if(consequtive > consequtive_blocks):
+		print("Sending data to cassandra")
+		while not send_queue.empty():
+			# detected case, sending items to KAA SDK via TCP socket
+			item_to_send = send_queue.get()
+			linestr =str(item_to_send)+"\n"
+			linebytes = bytes(linestr, 'utf-8')
+			socket.send(linebytes)
+
+	# consequtive was not bigger than consequtive_blocks, cleaning resources
+	send_queue = Queue()
+	send_queue.queue.clear()
+	consequtive = 0
+	local_consequtive = 0
+	local_data_sum = 0.0
+\end{lstlisting}
+
+Si el dato obtenido de la cola supera el umbral definido incrementaremos la variable que indica los bloques consecutivos válidos hasta el momento, además añadiremos el valor a una suma parcial. En cuanto tengamos un número de bloques válido efectuaremos una petición PATCH a la API que actualizará el valor para el dispositivo con la suma total de los bloques obtenidos. Por último éste valor se situa en otra cola que alimentará a la aplicación \textit{DataSender.java}.
+
+El motivo de enviar ésta señal cuando detectamos los bloques necesarios es para garantizar que la aplicación trabaja en tiempo real sobre el mapa, los datos que se envían a \textit{DataSender.java} pueden sufrir pequeños retrasos debio a que éstos se envían cuando se obtiene un valor que no supera el umbral. Tras enviarlos todos los recursos que ocupan son liberados para proceder a la detección de un nuevo vehículo.
+
+\newpage
+
+Las funciones \textit{producer} y \textit{consumer} son llamadas cuando se inicializan los Threads correspondientes a cada una de ellas.
+
+\begin{lstlisting}[language=python,caption={Inicialización de las hebras},label={lst:pi1}]
+	queue = Queue()
+
+	# thread instances
+	thread_prod = Thread(target=producer, args=(queue, ))
+	thread_cons = Thread(target=consumer, args=(queue, ))
+
+	# thread init
+	thread_prod.start()
+	thread_cons.start()
+
+\end{lstlisting}
+
+\newpage
+
+\subsection{Módulo de envío}
+
+Éste módulo se encargará de de inicializar el Socket necesario para que \textit{VehicleAnalyzer.py} le proporcione los datos que posteriormente enviará a Cassandra. La estructura es más simple que la del módulo anterior en gran medida a que el SDK que proporciona KAA tiene una interfaz muy cómoda para trabajar con ella.
+
+\subsubsection{Dependencias}
+
+Las dependencias necesarias son el SDK generado por KAA en formato \textit{.JAR} así como otras dependencias ajenas pertenecientes a KAA. Todas ellas se encuentran bajo el directorio \textit{sender} y se pueden identificar con los siguientes nombres:
+
+\begin{itemize}
+	\item kaa-java-ep-sdk.jar
+	\item log4j-over-slf4j-1.7.7
+	\item logback-classic-1.1.2
+	\item logback-core-1.1.2
+\end{itemize}
+
+\subsubsection{Resumen de ejecución}
+
+La primera tarea inicia el cliente KAA \texit{kaaClient} sobre el cual se enviarán los datos.
+
+Lo siguiente es inicializar el Socket y esperar la llegada de mensajes, los dos primeros indicarán localización e id como se indicó anteriormente.
+
+Mientras no se detecte una señal de parada (\textit{carácter 'q'}) el Socket estará aceptando conexiones y leyendo los datos de cada una.
+
+Para cada conexion crea un objeto de la clase \textit{AudioReport}, éste nombre y sus atributos vienen definidos por los esquemas que definimos anteriormente sobre la plataforma KAA. Tras asociarle los valores pertinentes el objeto es enviado gracias a la función \textit{addLogRecord(report);} que añadirá éste objeto en forma de entrada a Cassandra.
+
+\newpage
+
+\subsubsection{Código}
+
+En el siguiente fragmento de código se detalla como se abre el Socket y se leen las dos primeras entradas asociandolas a las variables pertinentes
+
+\begin{lstlisting}[language=python,caption={Inicialización del Socket},label={lst:pi1}]
+	ServerSocket Server = new ServerSocket (5000);
+
+	System.out.println ("Waint for VehicleAnalyzer on TCP socket at port 5000");
+
+	// Listening connections
+	Socket connected = Server.accept();
+	System.out.println( " VehicleAnalyzer with "+ connected.getInetAddress() +":"+connected.getPort()+" is connected! ");
+
+	// Init reading buffer over TCP socket
+	BufferedReader inFromClient = new BufferedReader(new InputStreamReader (connected.getInputStream()));
+
+	// First two packets comes with device location and device id
+	String location = inFromClient.readLine();
+	String device = inFromClient.readLine();
+\end{lstlisting}
+
+Para finalizar se muestra la creación y envío del objeto que se traducirá en una fila dentro de nuestra base de datos.
+
+\begin{lstlisting}[language=java,caption={Creación y envío de datos a Cassandra},label={lst:pi1}]
+	// create new AudioReport object wich is appended to Cassandra
+	AudioReport report = new AudioReport();
+	long timestamp = System.currentTimeMillis();
+	report.setZoneId(location);
+	report.setDeviceId(device);
+	report.setLevel(Double.parseDouble(fromclient));
+	report.setTimestamp(timestamp);
+
+	// send Audio Report object
+	kaaClient.addLogRecord(report);
+\end{lstlisting}
+
 \newpage
 
 
 \section{Desarrollo de la plataforma web.}
-TO CLEAN AND INSERT HERE
+
+La estructura de la plataforma web se detalló en el capítulo de diseño, por tanto vamos a proceder a analizar los archivos más relevantes que la componen. Al igual que el módulo de detección podemos hacer una distinción clara entre las dos partes que la componen, la web de RSMap y la API Rest.
+
+\subsection{Plataforma web}
+
+\subsubsection{Dependencias}
+
+Se encuentran especificadas en el archivo \textit{(RSMap\/requirements.txt)} dentro del repositorio \url	{https://github.com/RSMap/RSMap}
+
+\begin{itemize}
+	\item \textbf{Django==1.10.1}
+\end{itemize}
+
+\subsubsection{Código}
+
+Los archivos de Django que disponen el comportamiento de la aplicación (parte lógica) son \textbf{models.py} en el que se define la estructura de datos que será almacenada, tiene un formato como el que se muestra a continuación:
+
+
+\begin{lstlisting}[language=python,caption={Modelo definidos en Django},label={lst:pi1}]
+class Signal(models.Model):
+  device_id = models.TextField(primary_key=True)
+  lat = models.DecimalField(max_digits=9, decimal_places=6)
+  long = models.DecimalField(max_digits=9, decimal_places=6)
+  created = models.DateTimeField(auto_now=True, blank=True)
+  level = models.FloatField()
+
+  type = models.CharField(
+      max_length = 1,
+      choices = VEHICLE_TYPE,
+      default = UNKNOWN,
+  )
+
+  def __str__(self):
+  	return self.device_id
+\end{lstlisting}
+
+Un campo a tener en consideración es el llamado \textit{created}, en concreto el argumento \textbf{auto\_now=True} que nos va a permitir que cada vez que un objeto almacenado del tipo \textit{Signal} sea creado o actualizado, el valor de éste campo será actualizado con el \textit{timestamp} relativo a la fecha de dicho cambio. Así podremos tener constancia de cual fué el último momento en el se actualizo, por ejemplo, el campo \textit{level}.
+
+
+\newpage
+El siguiente fragmento de código pertenece al archivo \textit{urls.py} en el que se definirán las rutas que va a proporcionar RSMap en su web:
+
+\begin{lstlisting}[language=java,caption={Definición de URL's},label={lst:pi1}]
+urlpatterns = format_suffix_patterns([
+  url(r'^api/signals/$', views.SignalList.as_view(), name='signal-list'),
+  url(r'^api/signal/(?P<pk>[a-zA-Z0-9]+)/$', views.SignalDetail.as_view(), name='signal-detail'),
+  url(r'^$', TemplateView.as_view(template_name='index.html')),
+  url(r'^map/$', TemplateView.as_view(template_name='map.html')),
+])
+\end{lstlisting}
+
+Éstas URL's se definen mediante expresiones regulares, si en el navegador se introduce una URL que entra del patrón de una de éstas expresiones, se llamará a la vista correspondiente para esa URL.
+
+Tanto las URL's pertenecientes a la web, como las pertenecientes a la API Rest son definidas en éste mismo fichero.
+
+\bigskip
+
+Los directorios \textit{static} y \textit{templates} son los encargados de crear la parte visual de la web de RSMap.
+
+En \textit{templates} podemos encontrar las plantillas que sirve nuestra aplicación, ambas usan HTML5 y Bootstrap:
+
+\begin{itemize}
+	\item \textbf{index.html:} contiene la página principal.
+	\item \textbf{map.html:} contiene la página con el mapa de tráfico.
+\end{itemize}
+
+\bigskip
+
+Dentro del fichero \textit{map.html} se incluye el archivo \textit{static\//js\//rsmapMapUpdater.js} que se encargará de actualizar dinamicamente el contenido del mapa.
+
+La funcion \textit{checkDevices} se ejecuta cada 30 segundos y permite a un visitante saber si existen dispositivos retransmiendo en ese momento, en caso de que no se le mostrará una indicación de ello en la esquina superior derecha.
+
+\newpage
+
+\begin{lstlisting}[language=javascript,caption={Función checkDevices},label={lst:pi1}]
+function checkDevices(){
+  $(function(){
+      $.getJSON('http://52.210.3.41/api/signals.json', function(data) {
+          if(data.length == 0){
+            bootstrap_alert.warning('<strong>INFO:</strong> No devices sending data right now', 'warning', 4000);
+          }
+      });
+  });
+}
+\end{lstlisting}
+
+En el siguiente fragmento se muestra como se actualiza el mapa. El proceso consta de dos pasos.
+
+Cada segundo se comprueba la ruta \textit{http://52.210.3.41/api/signals.json} que devuelve la lista de dispositivos conectados a RSMap. Una vez se ha obtenido se recorre esa lista y se comprueban los tiempos en los que fueron añadidos, si éstos tiempos pertenecen al intervalo \textit{(tiempo actual - 2 segundos) > timestampSeñal > (tiempo actual)} se procede a representarla en el mapa.
+
+\begin{lstlisting}[language=javascript,caption={Actualización dinámica del mapa},label={lst:pi1}]
+// map update via AJAX
+$(document).ready(
+  function worker(){
+	  $.ajax(
+	    {
+	      // retrieve updated json with last valid signals
+	      url:"http://52.210.3.41/api/signals.json",
+
+	      complete: function(){
+	        // next call will be in 1 second
+	        setTimeout(worker, 1000);
+	      }
+	    }
+    ).then(
+      function(data)
+      {
+        //clean map
+        deleteMarkers();
+
+        // run all json markers and add them to map
+        for(var i = 0; i < data.length; i++){
+          var signal = data[i];
+          //console.log(signal);
+
+          var signal_timestamp = parseFloat(signal['created']);
+          // convert now to seconds and 2 seconds less
+          // (python timestamp comes in seconds)
+          // that's the reason to divide by 1k
+          var now = ((new Date().getTime()-2000)/1000|0) ;
+
+          // update 'last update' field
+          $('.last-update').empty();
+          var now_date = new Date();
+          $('.last-update').append(now_date);
+
+          // now was reduced 2 seconds so if signal_timestamp is greather than
+          // now means it was in a interval between now and 2 secs later
+          if(signal_timestamp > now){
+            var location = new google.maps.LatLng(parseFloat(signal['lat']), parseFloat(signal['long']));
+            var level = signal['level'];
+            addMarker(location, level);
+          }
+        }
+      }
+    );
+  }
+);
+\end{lstlisting}
+
+Para cada señal que se va a representar se tiene su valor \textit{level}. Según el tamaño de éste valor se representará la señal en el mapa con distintos iconos.
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=1]{../images/map/0.png}
+		\caption{Icono para valor -1: conexión de dispositivo}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=1]{../images/map/1.png}
+		\caption{Icono para valor \textgreater 55.5: vehículo pesado}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=1]{../images/map/2.png}
+		\caption{Icono para valor 45.5 \textless x \textless 55.5: vehículo medio}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=1]{../images/map/3.png}
+		\caption{Icono para valor x \textless 45.5: vehículo ligero}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+En un principio se pensó en efectuar ésta comprobación en la parte lógica de la aplicación pero como los datos se obtienen de todas formas en el cliente, se aprovecha ésta situación para realizar la comprobación en el navegador de éste modo se libera carga del servidor web.
+
+\subsection{API Rest}
+
+\subsubsection{Dependencias}
+
+Dentro del mismo repositorio, en el mismo archivo \textit{requirements.txt} se encuentra la linea necesaria para la API.
+
+\begin{itemize}
+	\item \textbf{djangorestframework==3.4.6}
+\end{itemize}
+
+\subsubsection{Código}
+
+Tanto el archivo \textit{models.py} como el \textit{urls.py} son usados por la API, que forma parte del ecosistema que genera Django, por tanto vamos a definir los archivos que componen la API.
+
+\bigskip
+
+El primer archivo se llama \textit{serializers.py} y en el se detalla cómo se va a usar el modelo \textit{Signal} en la API, es decir, cuando una petición solicite un objeto de tipo \textit{Signal} qué campos se devolveran en el JSON.
+
+\begin{lstlisting}[language=python,caption={Serializador del modelo Signal},label={lst:pi1}]
+class SignalSerializer(serializers.ModelSerializer):
+  created = serializers.DateTimeField(format="%s", required=False)
+
+  class Meta:
+    model = Signal
+    fields = ('device_id','lat','long','created','level','type',)
+\end{lstlisting}
+
+\bigskip
+
+Para finalizar el archivo \textit{views.py} definimos las vistas que tendrá nuestra API, dos como se ha mencionado anteriormente. La primera de ellas devuelve un JSON con todos los dispositivos conectados a RSMap y la segunda los campos para un dispositivo en concreto.
+
+Éstas vistas son llamadas desde las urls que servirán la API y que fueron descritas anteriormente cuando se expuso el archivo \textit{urls.py}.
+
+\begin{lstlisting}[language=python,caption={Vistas de la API},label={lst:pi1}]
+class SignalList(generics.ListCreateAPIView):
+  queryset = Signal.objects.all()
+  serializer_class = SignalSerializer
+
+class SignalDetail(generics.RetrieveUpdateDestroyAPIView):
+  queryset = Signal.objects.all()
+  serializer_class = SignalSerializer
+\end{lstlisting}
+
 \newpage
 
 
