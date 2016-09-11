@@ -12,11 +12,15 @@ A continuación se detallan la instalación, configuración así como el desarro
 	\item Instalación y configuración de Apache Zeppelin.
 \end{itemize}
 
+\newpage
+
 \section{ Descripción de las tecnologías seleccionadas}
 
 Éste apartado detalla las tecnologías seleccionadas así como las que finalmente fueron descartadas.
 
 A lo largo del desarrollo del proyecto el diseño ha ido cambiando progresivamente debido a que el número de elementos que lo componen deben cohesionarse para trabajar sobre la solución, siendo éste uno de los mayores problemas encontrados ya que al elegir una tecnología se deben desarrollar una serie de pruebas para confirmar que es la óptima de cara al diseño final.
+
+\newpage
 
 \subsection{Plataforma IOT}
 
@@ -62,7 +66,7 @@ Su arquitectura se puede ver en la \textit{figura 6.1}, actúa como middleware e
 
 \begin{figure}[ht]
   \begin{center}
-    \includegraphics[scale=0.60]{../images/kaa/arqui.png}
+    \includegraphics[scale=0.40]{../images/kaa/arqui.png}
 		\caption{Arquitectura de KAA}
     \label{fig:kaalog}
 	\end{center}
@@ -76,7 +80,7 @@ Su arquitectura se puede ver en la \textit{figura 6.1}, actúa como middleware e
 En éste aspecto no había muchas dudas en cuanto a las tecnologías a usar. Por una parte tenemos Raspbian, el sistema operativo oficial de Raspberry Pi basado en Debian. Usar algún otro sistema operativo ARM implicaría la incertidumbre sobre cualquier tipo de error en gran parte por el aspecto de los drivers.
 
 \bigskip
-Por otra parte tenemos el software desarrollado que se ejecuta en el dispositivo. Al igual que con el sistema operativo, el lenguaje de programación elegido desde un principio fué \textbf{Python} por su sencillez y número de bibliotecas. A medida que el desarrollo ha ido evolucionando Python ha demostrado ser el mejor candidato para el uso que se le pretendía dar, en gran parte gracias a la biblioteca \textbf{SoundDevice} que nos proporciona una manera realmente fácil de acceder y capturar datos de las interfaces de audio además de contar con numerosos ejemplos los cuales han sido de gran ayuda.
+Por otra parte tenemos el software desarrollado que se ejecuta en el dispositivo. Al igual que con el sistema operativo, el lenguaje de programación elegido desde un principio fue \textbf{Python} por su sencillez y número de bibliotecas. A medida que el desarrollo ha ido evolucionando Python ha demostrado ser el mejor candidato para el uso que se le pretendía dar, en gran parte gracias a la biblioteca \textbf{SoundDevice} que nos proporciona una manera realmente fácil de acceder y capturar datos de las interfaces de audio además de contar con numerosos ejemplos los cuales han sido de gran ayuda.
 
 \bigskip
 Por último, el dispositivo necesita hacer uso del SDK generado por KAA. Existen varias alternativas a la hora de generarlo y la más atractiva resultó ser \textbf{Java}. La interacción entre Python y Java se detallará más adelante.
@@ -92,7 +96,7 @@ Para almacenar datos de manera masiva existen varias alternativas como son Apach
 	\end{center}
 \end{figure}
 
-\begin{quote}\textit{ ''... is the right choice when you need scalability and high availability without compromising performance. Linear scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical data... is best-in-class, providing lower latency for your users...''
+\begin{quote}\textit{ ''... is the right choice when you need scalability and high availability without compromising performance... Is best-in-class, providing lower latency for your users...''
 }
 \newline
 \url{http://cassandra.apache.org/}
@@ -103,7 +107,7 @@ Tras una breve documentación acerca de Cassandra se vió que era un software co
 
 \subsection{Representación de información}
 
-En éste apartado las opciones a tener en cuenta era Apache-Zeppelin y Jupyter. Ambas herramientas tienen el papel de representar la información que va a almacenar Cassandra. La integración entre la base de datos y Zeppelin se hace de una manera sencilla así como las consultas y visualización de datos, es por eso por lo que finalmente se optó por la opción de \textbf{Apache Zeppelin} (\url{https://zeppelin.apache.org/}).
+En éste apartado las opciones a tener en cuenta era Apache-Zeppelin y Jupyter. Ambas herramientas tienen el papel de representar la información que va a almacenar Cassandra. La integración entre la base de datos y Zeppelin se hace de una manera sencilla (ambas pertenecen a Apache) así como las consultas y visualización de datos, es por eso por lo que finalmente se optó por la opción de \textbf{Apache Zeppelin} (\url{https://zeppelin.apache.org/}).
 
 \begin{figure}[!ht]
   \begin{center}
@@ -112,8 +116,8 @@ En éste apartado las opciones a tener en cuenta era Apache-Zeppelin y Jupyter. 
 	\end{center}
 \end{figure}
 
-\begin{quote}\textit{ ''. A web-based notebook that enables interactive data analytics.
-You can make beautiful data-driven, interactive and collaborative documents with SQL, Scala and more.''
+\begin{quote}\textit{ ''A web-based notebook that enables interactive data analytics.
+You can make beautiful data-driven, interactive and collaborative documents...''
 }
 \newline
 \url{https://zeppelin.apache.org/}
@@ -121,9 +125,11 @@ You can make beautiful data-driven, interactive and collaborative documents with
 
 Apache Zeppelin nos va a permitir configurar una serie de Notebooks en forma de plataforma web en los que podremos realizar consultas a Cassandra para obtener los datos almacenados de los dispositivos receptores. Los datos se obtendrán mediante consultas CQL y podrán ser representados de varias formas, incluyendo distintos tipos de gráficos así como permitiendo la exportación de los mismos.
 
+\newpage
+
 \subsection{Plataforma Web de RSMap}
 
-Para la plataforma web aunque las opciones eran varias, la tecnología usada será Django que es un framework para aplicaciones web en Python.
+Para la plataforma web aunque las opciones eran varias en términos de lenguajes y frameworks. Finalmente la tecnología usada será Django que es un framework para aplicaciones web en Python.
 
 \begin{figure}[!ht]
   \begin{center}
@@ -132,9 +138,11 @@ Para la plataforma web aunque las opciones eran varias, la tecnología usada ser
 	\end{center}
 \end{figure}
 
-Las principales causas para la elección son la familiaridad con el mismo, que trabaja bajo el modelo vista-controlador, su documentación y el módulo Django-Rest-Framework que permite a los dispositivos comunicarse directamente con la web que será la encargada de representar en un mapa pequeños iconos que indiquen el paso de un vehículo.
+Las principales causas para la elección son la familiaridad con el mismo, que trabaja bajo el modelo Vista-Controlador, su documentación y el módulo Django-Rest-Framework que permite a los dispositivos comunicarse directamente con la web que será la encargada de representar en un mapa pequeños iconos que indiquen el paso de un vehículo.
 
-El aspecto visual queda resuelto gracias a la librería Bootstrap.
+El mapa es provisto por Google Maps.  Para ofrecer una navegación fluida concretamente en la sección del mapa se hará uso de jQuery y AJAX que nos sirven métodos para actualizar la información en el mismo mapa de manera automática y sin necesidad de recargar la página para ver los cambios.
+
+El aspecto visual queda resuelto gracias a la librería Bootstrap (css) y una plantilla (html5) predefinida Open Source sobre la que efectuaremos las modificaciones necesarias para adaptarla a las necesidades de RSMap.
 
 \section{Instalación y configuración de Raspberry Pi}
 
@@ -236,6 +244,8 @@ Necesitamos una cuenta en Amazon EC2, tras registrarnos nos dirigimos al panel p
     \label{fig:1}
 	\end{center}
 \end{figure}
+
+\newpage
 
 El segundo paso es dirigirse a \textit{Community AMIs} y en el cuadro de búsqueda escribimos \textit{kaa-sandbox}. Lo recomendable es usar la última versión, en éste caso se ha tomado la \textbf{versión 0.9}.
 
@@ -355,7 +365,9 @@ Nos logeamos con una cuenta Tenant Developer, vamos a proceder a crear la estruc
 
 \newpage
 
-El campo \textit{namespace} indica en que paquete se encontrará la clase correspondiente al esquema definido dentro del SDK generado.
+Aquí se definen los campos que KAA va a proveer en el SDK generado, lo que se traduce en que éste mismo SDK nos ofrecerá una clase con los campos definidos en éste apartado. El campo \textit{namespace} indica en que paquete se encontrará la clase correspondiente al esquema definido dentro del SDK generado. KAA hace uso de Apache Avro para definir esquemas de serialización de datos. Ésto le permite manejar internamente la información almacenada en los esquemas.
+
+\bigskip
 
 \begin{lstlisting}[language=json,caption={Esquema de datos en JSON},label={lst:json_personal}]
 {
@@ -432,13 +444,15 @@ El otro punto que difiere es el \textit{Security Group}, dado que los puertos qu
 	\end{center}
 \end{figure}
 
+\newpage
+
 \subsection{Configuración}
 
 Para comprobar que funciona correctamente accedemos mediante \textit{SSH} y nos logeamos en la shell de Cassandra haciendo uso del comando \textbf{cqlsh} como indica la \textit{figura 6.16}.
 
 \begin{figure}[!ht]
   \begin{center}
-    \includegraphics[scale=0.65]{../images/cassandra/3.png}
+    \includegraphics[scale=0.55]{../images/cassandra/3.png}
 		\caption{Accediendo al servidor de Cassandra}
     \label{fig:kaa}
 	\end{center}
@@ -556,10 +570,24 @@ Ahora es momento de volver a KAA y definir el \textit{LogAppender} que se encarg
 
 \end{lstlisting}
 
-\newpage
+Los campos a tener en consideración en este archivo son los siguientes:
 
-Los detalles a destacar son que el usuario y la contraseña de Cassandra han sido ocultados por seguridad. Otro punto importante es que aquí se define a donde queremos enviar los datos mediante la IP pública del servidor Cassandra.
-Los campos del final indican la equivalencia entre los campos de esquema creado anteriormente y las tablas en Cassandra.
+\begin{itemize}
+	\item \textbf{Host:} hace referencia a la IP de Cassandra.
+	\item \textbf{Port:} puerto de Cassandra.
+	\item \textbf{User:} usuario de Cassandra.
+	\item \textbf{Password:} contraseña de Cassandra.
+	\item \textbf{keySpace:} keySpace de Cassandra.
+	\item \textbf{tableNamePattern:} nombre de la tabla a crear.
+	\item \textbf{columnMapping:} equivalencia entre los campos definidos en el esquema y las columnas que contendrá cada entrada en la base de datos.
+\end{itemize}
+
+
+Por tanto en éste fichero se especifica el usuario y la contraseña de Cassandra que han sido ocultados por seguridad, la IP pública del servidor Cassandra y campos del final indican la equivalencia entre los campos de esquema creado anteriormente y las tablas en Cassandra.
+
+Una vez generemos el esquema, KAA se conectará a Cassandra y creará las tablas según el formato que le hemos indicado en el mapa \textit{columnMapping}.
+
+\bigskip
 
 Un factor importante es el diseño de las tablas, pues las consultas en Cassandra son dependientes de la estructura de la base de datos. El tipo de campos que determinan la estructura de la tabla son los siguientes:
 
@@ -590,7 +618,19 @@ Tras guardar el \textit{log appender} podemos comprobar como se ha creao la tabl
 	\end{center}
 \end{figure}
 
-Para finalizar vamos a crear dos funciones en java dentro del Keyspace, las cuales nos ayudarán a visualizar y consultar los datos posteriormente. Es importante destacar que estas funciones pueden ser definidas en el lenguaje que queramos, en nuestro caso vamos a usar Java.
+\newpage
+
+Cuando la tabla contiene datos la consulta se muestra así:
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=0.65]{../images/cassandra/6.png}
+		\caption{Cassandra con datos almacenados}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+Para finalizar vamos a crear dos funciones en java dentro del Keyspace que nos ayudarán a visualizar y consultar los datos posteriormente. La necesidad de definir estas funciones viene dada porque el campo TimeStamp se almacena bajo el formato UnixTimestamp que nosproporciona los milisegundos actuales transcurridos desde 1970. Es importante destacar que estas funciones pueden ser definidas en el lenguaje que queramos, en nuestro caso vamos a usar Java.
 
 \bigskip
 
@@ -623,6 +663,36 @@ Ya sólo nos queda reiniciar el servicio:
 	$ sudo ./stack/ctlscript.sh start cassandra
 \end{lstlisting}
 
+A modo de resumen, hasta el momento tenemos la plataforma KAA desplegada, en ella se encuentra el esquema de datos a usar y el LogAppender que indica a donde se van a remitir los datos. Además tenemos Apache Cassandra desplegado y con las tablas necesarias creadas para empezar a enviar información de las señales detectadas. Ésto quiere decir estamos en disposición de generar el SDK que usarán los clientes para connectarse a Cassandra.
+
+\bigskip
+
+Para generar el SDK accedemos a la interfaz web de KAA. Los SDK's se generan bajo un sistema de versiones lo que nos posibilita tener varios para una misma aplicación con distinto funcionamiento. El control de éstas versiones se gestiona mediante perfiles SDK por lo que si queremos obtener el nuestro debemos definir en primer lugar un perfil en el que también se deben especificar las versiones para los esquemas y log appenders.
+
+Una vez nos encontremos en la interfaz buscamos la aplicación creada que se detalló en la sección de \textit{Configuración de KAA} y nos situamos en la opción \textit{SDK profiles} / \textit{Add SDK Profile}.
+
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=0.30]{../images/sdk/1.png}
+		\caption{Definición del SDK}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+\newpage
+
+Por último pulsamos la opción \textit{Generate SDK} la cual nos muestra una ventana en la que debemos escoger sobre qué lenguaje se generará el SDK. RSMap usa el SDK generado en Java.
+
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=0.30]{../images/sdk/2.png}
+		\caption{Definición del SDK}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
 \newpage
 
 \section{Desarrollo del módulo de sonido.}
@@ -642,7 +712,7 @@ Es hora de instalar Apache-Zeppelin. Como en los servicios anteriores, lo primer
 
 \bigskip
 
-La SO usado esta vez será Ubuntu 14.04.4 LTS, para seleccionarlo lo podemos buscar dentro de las imágenes disponibles al configurar la nueva instancia.
+El SO usado ésta vez será Ubuntu 14.04.4 LTS, para seleccionarlo lo podemos buscar dentro de las imágenes disponibles al configurar la nueva instancia.
 
 Como tráfico entrante abriremos el puerto 8080 que es donde se va a ejecutar Apache-Zeppelin.
 
