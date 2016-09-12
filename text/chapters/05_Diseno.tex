@@ -1,14 +1,13 @@
-\chapter{Diseño}
+\chapter{Diseño}\label{chap5}
 
-Éste apartado muestra una visión simplificada de como funciona la aplicación, será en la sección de implementación donde se completen los aspectos restantes cuya explicación resulta más fácil valiéndose del código usado además el porqué de la elección de las tecnologías con las que se llevan a cabo las tareas.
+Éste apartado muestra una visión simplificada de como funcionará la aplicación, será en la sección de \textit{Implementación} donde se completen los aspectos restantes cuya explicación resulta más fácil valiéndose del código usado además el porqué de la elección de las tecnologías con las que se llevan a cabo las tareas.
 
 \section{Diseño del dispositivo receptor}
 
-El dispositivo receptor tendrá instalado y en continua ejecución el módulo de reconocimiento de vehículos. Los elementos hardware requeridos se detallaron en la sección \textit{presupuesto}.
+El dispositivo receptor tendrá instalado y en continua ejecución el módulo de reconocimiento de vehículos. Los elementos hardware requeridos se detallaron en la sección \textit{Presupuesto}.
 
 \section{Diseño del módulo de reconocimiento de vehículos}
-El lenguaje usado para la recepción de sonido será {\tt Python 3} debido a la facilidad de uso y el número de librerías que presenta. Por otra parte
-El módulo principal estará compuesto de dos funciones usando como base un patrón típico en sistemas concurrentes, el  modelo de productor-consumidor. Ésto nos permitirá trabajar con dos hebras independientes (pero pertenecientes al mismo proceso) las cuales trabajan sobre una cola en la que la hebra productora va introduciendo los valores numéricos obtenidos por el micrófono mientras que el consumidor va extrayendo los mismos de la cola para su análisis, el cual se detalla en la subsección Desarrollos algorítmicos.
+El lenguaje usado para la recepción de sonido será {\tt Python 3} debido a la facilidad de uso y el número de librerías que presenta. El módulo principal estará compuesto de dos funciones usando como base un patrón típico en sistemas concurrentes, el  modelo de Productor-Consumidor. Ésto nos permitirá trabajar con dos hebras independientes (pero pertenecientes al mismo proceso) las cuales trabajan sobre una cola en la que la hebra productora va introduciendo los valores numéricos obtenidos por el micrófono mientras que el consumidor va extrayendo los mismos de la cola para su análisis, el cual se detalla en la subsección Desarrollos algorítmicos.
 
 Una vez el consumidor ha concretado que la información recibida es indicador de que un vehículo ha pasado tiene dos tareas:
 
@@ -22,7 +21,18 @@ La estructura de datos más remarcable en éste módulo es la cola, sin duda es 
 
 \bigskip
 
-Para transmitir la información a la web se usarán diccionarios de tipo \textit{'clave':valor} en formato JSON cuyo tamaño reducido los hace ideales para enviarlos de manera recurrente.
+Para transmitir la información a la web se usarán diccionarios de tipo \textit{'clave':valor} en formato JSON cuyo tamaño reducido los hace ideales para enviarlos de manera recurrente. Una aproximación sería:
+
+\begin{lstlisting}[language=json,caption={Formato a utilizar},label={lst:json_personal3}]
+{
+ "device_id":"Ronda",
+ "lat":"0.000017",
+ "long":"0.000017",
+ "created":"1473697709",
+ "level":56.5,
+ "type":"u"
+}
+\end{lstlisting}
 
 \bigskip
 
@@ -46,7 +56,7 @@ A continuación se explica cuál es la forma de proceder a la identificación de
 
   El valor de cada bloque válido (que supera la cota), es almacenado en una cola, cuando el número de bloques es suficiente para concretar que un vehículo ha pasado los valores almacenados en la cola se mandan a la base de datos de almacenamiento masivo así como a la API y ya estarán listos para su visualización.
 
-  Para ilustrarlo con un ejemplo nos valdremos de la \textit{figura 5.1}.
+  Para ilustrarlo con un ejemplo nos valdremos de la \textit{Figura 5.1}.
 
   Cuando el vehículo pasa dentro del rango de captura del micrófono empiezan a contabilizarse los bloques con un valor superior a la cota definida desde \textbf{B1} hasta \textbf{BN}. Si tenemos un número de bloques válido contabilizaremos que ha pasado un vehículo. Si el número de bloques se ve interrumpido por 'silencio' o sonido por debajo de la cota, la contabilización de bloques se reinicia y en la cola de envío son descartados todos los elementos pertenecientes a los bloques consecutivos anteriores.
 \end{itemize}
@@ -62,7 +72,7 @@ A continuación se explica cuál es la forma de proceder a la identificación de
 
 \section{Almacenamiento de información}
 
-La información será enviada desde los dispositivos recolectores hasta el servidor que contiene la base de datos de Apache Cassandra que se encontrará instalada en una instancia propia para garantizar que todos los recursos de la máquina se dedican a atender las peticiones de almacenamiento. Por otra parte las peticiones HTTP se realizarán mediante ficheros JSON contra una API Rest construida bajo Django-Rest-Framework
+La información será enviada desde los dispositivos recolectores hasta el servidor que contiene la base de datos de Apache Cassandra que se encontrará instalada en una instancia propia para garantizar que todos los recursos de la máquina se dedican a atender las peticiones de almacenamiento. Por otra parte las peticiones HTTP se realizarán mediante ficheros JSON contra una API Rest construida bajo Django Rest Framework.
 
 Ésta base de datos será de tipo NoSQL debido a que no se requiere ningún tipo de jerarquía sobre los datos y tampoco se precisa una estricta integridad de los mismos ni operaciones de tipo atómico.
 
@@ -119,7 +129,7 @@ En lo que a la parte visual se refiere, se usará Bootstrap para garantizar un d
 
 \subsection{Diseño de la api REST}
 
-La api estará integrada dentro de Django gracias al módulo Django-Rest-Framework, es por éste motivo por lo que se desarrolla dentro de la sección \textit{Diseño del portal web}.
+La api estará integrada dentro de Django gracias al módulo Django Rest Framework, es por éste motivo por lo que se desarrolla dentro de la sección \textit{Diseño del portal web}.
 
 \bigskip
 

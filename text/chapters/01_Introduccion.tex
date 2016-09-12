@@ -1,9 +1,9 @@
 \chapter{Motivación e Introducción}
 
-A día de hoy, las tecnologías han llegado a un punto en el que envuelven completamente a las personas, ciudades y el mundo entero. Cada vez son más los elementos que nos encontramos a nuestro alrededor que poseen conexión a internet mediante la cual envían información de temperatura, humedad relativa, nuestras pulsaciones o los pasos que damos y que posteriormente podemos consultar en nuestro dispositivo móvil o el ordenador. Debido a esto y a otra gran diversidad de elementos que generan y almacenan cantidades ingentes de información han nacido nuevas ramas en la computación como son el \textbf{``Big Data''} o \textbf{``IOT''}, lo que se conoce comunmente como \textit{``el internet de las cosas.''}
+A día de hoy, las tecnologías han llegado a un punto en el que envuelven completamente a las personas, ciudades y el mundo entero. Cada vez son más los elementos que nos encontramos a nuestro alrededor que poseen conexión a Internet mediante la cual envían información de temperatura, humedad relativa, nuestras pulsaciones o los pasos que damos y que posteriormente podemos consultar en nuestro dispositivo móvil o el ordenador. Debido a esto y a otra gran diversidad de elementos que generan y almacenan cantidades ingentes de información han nacido nuevas ramas en la computación como son el \textbf{Big Data} o \textbf{IOT}.
 
 \bigskip
-Las ciudades sin duda alguna son uno de los mejores candidatos para el desarrollo y aplicación de éste tipo de tecnologías. Todos hemos oído hablar últimamente del término \textbf{``ciudad inteligente''} o \textbf{``smart city''} y es que, con la proliferación de las tecnologías citadas anteriormente así como una imperiosa necesidad de gestionar los recursos energéticos, económicos, medioambientales y administrativos de manera más eficiente han hecho necesaria la cohesión entre la tecnología y las propias ciudades.
+Las ciudades sin duda alguna son uno de los mejores candidatos para el desarrollo y aplicación de éste tipo de tecnologías. Todos hemos oído hablar últimamente del término \textit{ciudad inteligente} o \textit{smart city} y es que, con la proliferación de las tecnologías citadas anteriormente así como una imperiosa necesidad de gestionar los recursos energéticos, económicos, medioambientales y administrativos de manera más eficiente han hecho necesaria la cohesión entre la tecnología y las propias ciudades.
 
 \bigskip
 Partiendo de esta base existen muchos campos en los que trabajar para hacer una ciudad mejor. Uno de los más relevantes puede ser el tráfico por el impacto que tiene y a los diversos factores que afecta.
@@ -13,11 +13,11 @@ Bajo estas premisas se aborda el problema de identificar el tráfico que fluye p
 
 \newpage
 
-RSMap es capaz de detectar el tráfico que fluye por uno (o varios) puntos en los que se encuentran dispositivos (Raspberry Pi) analizando el ruido ambiente. Una vez identificados se envían mediante una API Rest construida con Django-Rest-Framework y muestran en una web basada en Django que hace uso de AJAX para una cómoda navegación sin necesidad de refrescar la página manualmente.
+RSMap es capaz de detectar el tráfico que fluye por uno (o varios) puntos en los que se encuentran dispositivos  \textbf{Raspberry Pi} analizando el ruido ambiente. Una vez identificados se envían mediante una \textbf{API REST} construida con \textbf{Django Rest Framework} y se  muestran en un mapa web.La web basada en \textbf{Django} hace uso de \textbf{Ajax} para una cómoda navegación sin necesidad de refrescar la página manualmente.
 
-El mapa es proporcionado por la API de Google Maps.
+El mapa es proporcionado por la API de \textbf{Google Maps}.
 
-Por otra parte tenemos KAA IOT que es una plataforma para administrar un gran número de dispositivos. Ésta plataforma genera un SDK del cual se sirven los receptores para enviar de manera masiva los datos recabados al SGBD Apache Cassandra los cuales pueden ser consultados y descargados mediante un Notebook que proporciona Apache Zeppelin.
+Por otra parte tenemos \textbf{Kaa} que es una plataforma para administrar un gran número de dispositivos. Ésta plataforma genera un \textbf{SDK} del cual se sirven los receptores para enviar de manera masiva los datos recabados al SGBD \textbf{Apache Cassandra} los cuales pueden ser consultados y descargados mediante un Notebook que proporciona \textbf{Apache Zeppelin}.
 
 \section{Aplicaciones similares a RSMap}
 \begin{itemize}
@@ -29,7 +29,7 @@ Por otra parte tenemos KAA IOT que es una plataforma para administrar un gran n�
     Posee un detector multidireccional para identificar el tráfico pero necesita los sensores tienen una autonomía de unas dos semanas por lo que implica un mantenimiento por cada dispositivo detector.
   \item Diamond Traffic (\url{http://diamondtraffic.com/})
 
-    Tiene una arquitectura parecida a la de un radar, ésto es un gran incoveniente pues no se pueden situar dispositivos a lo largo de una calle sin una gran alteración del entorno.
+    Tiene una arquitectura parecida a la de un radar, ésto es un gran inconveniente pues no se pueden situar dispositivos a lo largo de una calle sin una gran alteración del entorno.
   \item Counting Cars (\url{http://www.countingcars.com})
 
     Posee varios tipos de detectores basados en audio y video por contrapartida el precio de cada dispositivo es desorbitado.
@@ -37,26 +37,26 @@ Por otra parte tenemos KAA IOT que es una plataforma para administrar un gran n�
 
 Un factor común que tienen todas estas plataformas es que es software propietario por lo que se desconoce el uso que se le pueden dar a los datos recabados además de tener unos costes nada asumibles si se pretende monitorizar el tráfico con muchos dispositivos.
 
-RSMap compite ofreciendo una plataforma Open Source, totalmente personalizable y con costes más equilibrados.
+RSMap compite ofreciendo una plataforma \textbf{Open Source}, totalmente personalizable y con costes más equilibrados.
 
 \newpage
 
-Mediante un análisi DAFO podemos concluir que las \textbf{debilidades} de RSMap es que a diferencia de sus competidores, usa equipos más baratos para la recolección de datos lo cual puede suponer una pérdida de acierto a la hora de la detección del tráfico lo cual se puede optimizar estudiando en profundiad el algoritmo de detección de vehículos.
+Mediante un análisi \textit{DAFO} podemos concluir que las \textbf{debilidades} de RSMap es que a diferencia de sus competidores, usa equipos más baratos para la recolección de datos lo cual puede suponer una pérdida de acierto a la hora de la detección del tráfico no obstante existe un margen de mejora para optimizar el algoritmo de detección de vehículos.
 
 La \textbf{amenaza} principal es sin duda que éstas plataformas cuenta con años de trabajo lo que se traduce en una gran amplitud de clientes.
 
 La partes que hacen atractivo a RSMap son que es totalmente libre y personalizable y que la infraestructura tiene un coste menor por tanto hablamos de claras \textbf{fortalezas} frente a sus competidores.
 
-Por último las \textbf{oportunidades} que se proyectan son prometedoras debido al auge de las \textbf{Smart Cities} luego, con un buen prototipo y técnicas de marketing se podría dar a conocer e implementar en lugares modestos e ir depurando y mejorando su funcionamiento hasta que sea capaz de funcionar óptimamente en grandes urbes.
+Por último las \textbf{oportunidades} que se proyectan son prometedoras debido al auge de las \textit{Smart Cities} luego, con un buen prototipo y técnicas de marketing se podría dar a conocer e implementar en lugares modestos e ir depurando y mejorando su funcionamiento hasta que sea capaz de funcionar óptimamente en grandes urbes.
 
 
 \section{Alcance de la memoria}
 
-El proceso técnico se encuentra detallado en el \textit{capítulo 5} (\textbf{Diseño}), que contiene el modelo que se pretende implementar y en el \textit{capítulo 6} (\textbf{Implementación}) que contiene los elementos software desarrollados.
+El proceso técnico se encuentra detallado en el \textit{capítulo \ref{chap5}} (\textbf{Diseño}), que contiene el modelo que se pretende implementar y en el \textit{capítulo \ref{chap6}} (\textbf{Implementación}) que contiene los elementos software desarrollados.
 
-Antes de ello se expondrán en el \textit{capítulo 2}  los (\textbf{Objetivos}) que se consideran necesarios para obtener una solución válida al problema; el \textit{capítulo 3} (\textbf{Planificación}) consta de las distintas fases a superar y en el \textit{capítulo 4}  (\textbf{Análisis}) de los requisitos necesarios a alcanzar.
+Antes de ello se expondrán en el \textit{capítulo \ref{chap2}}  los (\textbf{Objetivos}) que se consideran necesarios para obtener una solución válida al problema; el \textit{capítulo \ref{chap3}} (\textbf{Planificación}) consta de las distintas fases a superar y en el \textit{capítulo \ref{chap4}} (\textbf{Análisis}) de los requisitos necesarios a alcanzar.
 
 \bigskip
-Por último en el \textit{capítulo 7} (\textbf{Pruebas}), se remiten las pruebas realizadas que corroboran el correcto funcionamiento y se concluye con el el \textit{capítulo 8} (\textbf{Conclusiones y trabajos futuros}) en el cual se analiza el camino recorrido a lo largo de todas las fases anteriores así como posibles funcionalidades incorporables al sistema.
+Por último en el \textit{capítulo \ref{chap7}} (\textbf{Pruebas}), se remiten las pruebas realizadas que corroboran el correcto funcionamiento y se concluye con el el \textit{capítulo \ref{chap8}}  (\textbf{Conclusiones y trabajos futuros}) en el cual se analiza el camino recorrido a lo largo de todas las fases anteriores así como posibles funcionalidades incorporables al sistema.
 
 \section{Principales fuentes}

@@ -1,4 +1,6 @@
 \chapter{Objetivos}
+\label{chap2}
+
 
 El propósito de RSMap es proporcionar un sistema compuesto por varios modulos cuyo cometido final sea que cualquiera pueda conocer el estado del tráfico actual en una localización concreta.
 
@@ -18,6 +20,7 @@ Los objetivos se enumeran con más detalle a continuación:
 Los aspectos formativos más utilizados son:
 \begin{itemize}
   \item \textbf{Infraestructuras virtuales}, ya que los servicios usados son en su totalidad virtualizados así como el scripting necesario para la automatización de ciertas tareas.
+
   \item \textbf{Sistemas concurrentes}, debido a que al trabajar con dispositivos de un perfil medio-bajo para la recolección se hace necesario el paralelizar ciertas operaciones.
   \item \textbf{Bases de datos}, un elemento indispensable para tratar el problema que se plantea de almacenamiento de grandes cantidades de datos.
   \item \textbf{Ingeniería de servidores}, para la configuración de los distintos VPS usados.
@@ -30,17 +33,17 @@ Los aspectos formativos más utilizados son:
 El proyecto ofrecerá dos secciones en las que se podrá visualizar el estado del tráfico mediante un mapa y consultar los valores obtenidos de los dispositivos que se encuentran retransmitiendo información.
 
 \bigskip
-Tras el desarrollo, RSMap será capaz de identificar cuando pasa un vehículo cerca de la ubicación del dispositivo recolector de datos que a su vez, se encargará de transmitirlo a distintas plataformas para su almacenamiento, consulta y representación. Cabe destacar que el proyecto estará constituido únicamente con software libre lo que ofrece la posibilidad de añadir nuevas funcionalidades por parte de terceros gracias al caracter modular de la aplicación, además de ser una obligación moral debido a que todas las tecnologías usadas que se detallarán más adelante son completamente abiertas.
+Tras el desarrollo, RSMap será capaz de identificar cuando pasa un vehículo cerca de la ubicación del dispositivo recolector de datos que a su vez, se encargará de transmitirlo a distintas plataformas para su almacenamiento, consulta y representación. Cabe destacar que el proyecto estará constituido únicamente con software libre lo que ofrece la posibilidad de añadir nuevas funcionalidades por parte de terceros gracias al carácter modular de la aplicación, además de ser una obligación moral debido a que todas las tecnologías usadas que se detallarán más adelante son completamente abiertas.
 
 Por otra parte se pretende ofrecer los datos de manera libre al público o entidades que deseen acceder a ellos.
 
 \bigskip
-En este caso, la aplicación hace uso del módulo desarrollado de detección de tráfico, sin embargo, el ámbito de la aplicación no se cierra exclusivamente a éste propósito ya que debido a su modularidad será posible el desarrollo y acoplamiento de distintos módulos de detección como podrían ser la temperatura, la humedad relativa o la luminosidad ó el análisis de los datos obtenidos mediante con herramientas como Apache Spark por ejemplo, quedando completamente abierto a cualquier modelo que un desarrollador quiera representar, por tanto hablamos de una herramienta completamente personalizable según las necesidades requeridas.
+En este caso, la aplicación hace uso del módulo desarrollado de detección de tráfico, sin embargo, el ámbito de la aplicación no se cierra exclusivamente a éste propósito ya que debido a su modularidad será posible el desarrollo y acoplamiento de distintos módulos de detección como podrían ser la temperatura, la humedad relativa o la luminosidad ó el análisis de los datos obtenidos mediante con herramientas como \texit{Apache Spark} por ejemplo, quedando completamente abierto a cualquier modelo que un desarrollador quiera representar, por tanto hablamos de una herramienta completamente personalizable según las necesidades requeridas.
 
 
 \section{Interdependencia de los objetivos}
 
-Los objetivos podríamos alinearlos mentalmente a modo de una piramide inversa, el principal y sobre el que gira este proyecto es \textbf{O1} el cual va a generar la información, sin la cual el resto no tendrían sentido. Por otra parte existe una fuerte relación con \textbf{O2} ya que el mismo módulo encargado de generar la información deberá ser replicable y configurable tantas veces como se desee, de esta manera contribuimos a como se ha mencionado anteriormente, cualquier usuario pueda aportar datos al sistema.
+Los objetivos podríamos alinearlos mentalmente a modo de una pirámide inversa, el principal y sobre el que gira este proyecto es \textbf{O1}\ref{objetivos} el cual va a generar la información, sin la cual el resto no tendrían sentido. Por otra parte existe una fuerte relación con \textbf{O2} ya que el mismo módulo encargado de generar la información deberá ser replicable y configurable tantas veces como se desee, de esta manera contribuimos a como se ha mencionado anteriormente, cualquier usuario pueda aportar datos al sistema.
 
 En el siguiente escalón de la pirámide tendríamos \textbf{O3} y \textbf{O4} los cuales también están fuertemente ligados entre sí, ya que de nada nos serviría almacenar toda la información si no proveemos un método fácil para consultarla.
 

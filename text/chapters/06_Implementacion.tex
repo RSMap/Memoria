@@ -1,18 +1,19 @@
 \chapter{Implementación}
+\label{chap6}
 
-A continuación se detallan la instalación, configuración así como el desarrollo de los elementos que componenen el sistema. A modo de resumen los puntos serán los siguientes:
+
+A continuación se detallan la instalación, configuración así como el desarrollo de los elementos que componen el sistema. A modo de resumen los puntos serán los siguientes:
 
 \begin{itemize}
 	\item Descripción de las tecnologías seleccionadas.
 	\item Instalación y configuración de Raspberry Pi.
-	\item Instalación y configuración de KAA.
+	\item Instalación y configuración de Kaa.
 	\item Instalación y configuración de Apache Cassandra.
 	\item Desarrollo del módulo de detección de vehículos.
 	\item Desarrollo de la plataforma web.
 	\item Instalación y configuración de Apache Zeppelin.
 \end{itemize}
 
-\newpage
 
 \section{ Descripción de las tecnologías seleccionadas}
 
@@ -24,7 +25,7 @@ A lo largo del desarrollo del proyecto el diseño ha ido cambiando progresivamen
 
 \subsection{Plataforma IOT}
 
-Éste aspecto ha sio uno de los más relevantes, el cual ha marcado el funcionamiento final de la aplicación. Existen muchas alternativas debido al auge de IOT no obstante la plataforma debía cumplir una serie de premisas enumeradas a continuación:
+Éste aspecto ha sido uno de los más relevantes, el cual ha marcado el funcionamiento final de la aplicación. Existen muchas alternativas debido al auge de IOT no obstante la plataforma debía cumplir una serie de premisas enumeradas a continuación:
 
 \begin{itemize}
     \item \textbf{Open Source: } para mantener el licenciamiento de la aplicación final.
@@ -46,7 +47,7 @@ El abanico de posibilidades es muy extenso pero no todas cumplen con los requisi
 
 \newpage
 
-Esto nos lleva a \textbf{KAA} (\url{http://www.kaaproject.org/}) la cual cumple todos los requisitos deseados completamente.
+Esto nos lleva a \textbf{Kaa} (\url{http://www.kaaproject.org/}) la cual cumple todos los requisitos deseados completamente.
 
 \begin{figure}[ht]
   \begin{center}
@@ -60,14 +61,14 @@ Esto nos lleva a \textbf{KAA} (\url{http://www.kaaproject.org/}) la cual cumple 
 \url{http://www.kaaproject.org/}
 \end{quote}
 
-KAA provee una imagen para ser instalada sobre Amazon EC2 lo que simplifica mucho la tarea de instalación y configuración, además cuenta con una extensa documentación, webinars y ejemplos que han sido de gran ayuda a la hora del desarrollo.
+Kaa provee una imagen para ser instalada sobre Amazon EC2 lo que simplifica mucho la tarea de instalación y configuración, además cuenta con una extensa documentación, webinars y ejemplos que han sido de gran ayuda a la hora del desarrollo.
 
-Su arquitectura se puede ver en la \textit{figura 6.1}, actúa como middleware entre nuestra aplicación y los dispositivos que se desean conectar, para ello cuenta con un servidor web (instalado en la imagen que proveen) en el cual podemos configurar las aplicaciones que deseemos. Para cada una de éstas aplicaciones se genera un SDK en el lenguaje deseado el cual será usado para enviar ó recibir información.
+Su arquitectura se puede ver en la \textit{Figura \ref{fig:kaalog}}, actúa como middleware entre nuestra aplicación y los dispositivos que se desean conectar, para ello cuenta con un servidor web (instalado en la imagen que proveen) en el cual podemos configurar las aplicaciones que deseemos. Para cada una de éstas aplicaciones se genera un SDK en el lenguaje deseado el cual será usado para enviar ó recibir información.
 
 \begin{figure}[ht]
   \begin{center}
     \includegraphics[scale=0.40]{../images/kaa/arqui.png}
-		\caption{Arquitectura de KAA}
+		\caption{Arquitectura de Kaa}
     \label{fig:kaalog}
 	\end{center}
 \end{figure}
@@ -80,14 +81,14 @@ Su arquitectura se puede ver en la \textit{figura 6.1}, actúa como middleware e
 En éste aspecto no había muchas dudas en cuanto a las tecnologías a usar. Por una parte tenemos Raspbian, el sistema operativo oficial de Raspberry Pi basado en Debian. Usar algún otro sistema operativo ARM implicaría la incertidumbre sobre cualquier tipo de error en gran parte por el aspecto de los drivers.
 
 \bigskip
-Por otra parte tenemos el software desarrollado que se ejecuta en el dispositivo. Al igual que con el sistema operativo, el lenguaje de programación elegido desde un principio fue \textbf{Python} por su sencillez y número de bibliotecas. A medida que el desarrollo ha ido evolucionando Python ha demostrado ser el mejor candidato para el uso que se le pretendía dar, en gran parte gracias a la biblioteca \textbf{SoundDevice} que nos proporciona una manera realmente fácil de acceder y capturar datos de las interfaces de audio además de contar con numerosos ejemplos los cuales han sido de gran ayuda.
+Por otra parte tenemos el software desarrollado que se ejecuta en el dispositivo. Al igual que con el sistema operativo, el lenguaje de programación elegido desde un principio fue {\tt Python} por su sencillez y número de bibliotecas. A medida que el desarrollo ha ido evolucionando {\tt Python} ha demostrado ser el mejor candidato para el uso que se le pretendía dar, en gran parte gracias a la biblioteca \textbf{SoundDevice} que nos proporciona una manera realmente fácil de acceder y capturar datos de las interfaces de audio además de contar con numerosos ejemplos los cuales han sido de gran ayuda.
 
 \bigskip
-Por último, el dispositivo necesita hacer uso del SDK generado por KAA. Existen varias alternativas a la hora de generarlo y la más atractiva resultó ser \textbf{Java}. La interacción entre Python y Java se detallará más adelante.
+Por último, el dispositivo necesita hacer uso del SDK generado por Kaa. Existen varias alternativas a la hora de generarlo y la más atractiva resultó ser {\tt Java}. La interacción entre {\tt Python} y {\tt Java} se detallará más adelante.
 
 \subsection{Almacenamiento de información}
 
-Para almacenar datos de manera masiva existen varias alternativas como son Apache HBase, MongoDB, Apache Cassandra, Hive ó Redis. En éste aspecto la diferencia entre unas y otras es menores sin embargo hay una de ellas que destaca respecto a las otras por la facilidad de integración con KAA, es \textbf{Apache Cassandra} (\url{http://cassandra.apache.org/}).
+Para almacenar datos de manera masiva existen varias alternativas como son Apache HBase, MongoDB, Apache Cassandra, Hive ó Redis. En éste aspecto la diferencia entre unas y otras es menores sin embargo hay una de ellas que destaca respecto a las otras por la facilidad de integración con Kaa, es \textbf{Apache Cassandra} (\url{http://cassandra.apache.org/}).
 
 \begin{figure}[!ht]
   \begin{center}
@@ -102,7 +103,7 @@ Para almacenar datos de manera masiva existen varias alternativas como son Apach
 \url{http://cassandra.apache.org/}
 \end{quote}
 
-Tras una breve documentación acerca de Cassandra se vió que era un software con unas características y una potencia a tener muy en cuenta además de su facilidad integración con KAA como se ha mencionado anteriormente, también se pueden definir funciones personalizadas en el lenguaje deseado y tiene una línea de comandos amigable. El lenguaje de consultas es CQL y su sintaxis no difiere mucho del resto de SGBD.
+Tras una breve documentación acerca de Cassandra se vió que era un software con unas características y una potencia a tener muy en cuenta además de su facilidad integración con Kaa como se ha mencionado anteriormente, también se pueden definir funciones personalizadas en el lenguaje deseado y tiene una línea de comandos amigable. El lenguaje de consultas es CQL y su sintaxis no difiere mucho del resto de SGBD.
 
 
 \subsection{Representación de información}
@@ -129,7 +130,7 @@ Apache Zeppelin nos va a permitir configurar una serie de Notebooks en forma de 
 
 \subsection{Plataforma Web de RSMap}
 
-Para la plataforma web aunque las opciones eran varias en términos de lenguajes y frameworks. Finalmente la tecnología usada será Django que es un framework para aplicaciones web en Python.
+Para la plataforma web aunque las opciones eran varias en términos de lenguajes y frameworks. Finalmente la tecnología usada será Django que es un framework para aplicaciones web en {\tt Python}.
 
 \begin{figure}[!ht]
   \begin{center}
@@ -142,7 +143,7 @@ Las principales causas para la elección son la familiaridad con el mismo, que t
 
 El mapa es provisto por Google Maps.  Para ofrecer una navegación fluida concretamente en la sección del mapa se hará uso de jQuery y AJAX que nos sirven métodos para actualizar la información en el mismo mapa de manera automática y sin necesidad de recargar la página para ver los cambios.
 
-El aspecto visual queda resuelto gracias a la librería Bootstrap (css) y una plantilla (html5) predefinida Open Source sobre la que efectuaremos las modificaciones necesarias para adaptarla a las necesidades de RSMap.
+El aspecto visual queda resuelto gracias a la librería Bootstrap (CSS) y una plantilla (HTML5) predefinida Open Source sobre la que efectuaremos las modificaciones necesarias para adaptarla a las necesidades de RSMap.
 
 \section{Instalación y configuración de Raspberry Pi}
 
@@ -229,11 +230,11 @@ En éste caso el dispositivo se llama \textit{C-Media USB Headphone SetC-Media U
   }
 \end{lstlisting}
 
-\section{Instalación y configuración de KAA}
+\section{Instalación y configuración de Kaa}
 
 \subsection{Instalación}
 
-Para la instalación de KAA nos bastará con Amazon EC2, ya que el sistema de imágenes de SO contiene la versión más actual de KAA, los pasos a seguir son los siguientes:
+Para la instalación de Kaa nos bastará con Amazon EC2, ya que el sistema de imágenes de SO contiene la versión más actual de Kaa, los pasos a seguir son los siguientes:
 
 Necesitamos una cuenta en Amazon EC2, tras registrarnos nos dirigimos al panel principal, y en el apartado \textit{INSTANCES} seleccionamos, \textit{Launch Instance} para crear una nueva máquina.
 
@@ -291,7 +292,7 @@ El siguiente diálogo nos da la opción de configurar el almacenamiento, debido 
 	\end{center}
 \end{figure}
 
-Los \textit{Security group} hacen referencia a la configuración de puertos, en la documentación de KAA se especifica cual debe ser, para el correcto funcionamiento y tiene una estructura como la de la \textit{ figura 6.7}.
+Los \textit{Security group} hacen referencia a la configuración de puertos, en la documentación de Kaa se especifica cual debe ser, para el correcto funcionamiento y tiene una estructura como la de la \textit{ figura 6.7}.
 
 \begin{figure}[!ht]
   \begin{center}
@@ -315,9 +316,9 @@ Por último y no menos importante, debemos crear un par de llaves ó asignar uno
 
 \subsection{Configuración}
 
-Una vez tenemos el servicio instalado la configuración es trivial debido a que KAA provee un servicio web através del que definimos todo lo necesario.
+Una vez tenemos el servicio instalado la configuración es trivial debido a que Kaa provee un servicio web através del que definimos todo lo necesario.
 
-Antes de empezar merece la pena destacar que existe 3 tipos de usuarios en KAA:
+Antes de empezar merece la pena destacar que existe 3 tipos de usuarios en Kaa:
 
 \begin{itemize}
 	\item \textbf{Admin: } puede dar de alta Tenant admins.
@@ -327,7 +328,7 @@ Antes de empezar merece la pena destacar que existe 3 tipos de usuarios en KAA:
 
 \bigskip
 
-El primer paso es establecer la ip pública de KAA, accediendo desde el menú \textit{management}.
+El primer paso es establecer la ip pública de Kaa, accediendo desde el menú \textit{management}.
 
 \begin{figure}[!ht]
   \begin{center}
@@ -365,7 +366,7 @@ Nos logeamos con una cuenta Tenant Developer, vamos a proceder a crear la estruc
 
 \newpage
 
-Aquí se definen los campos que KAA va a proveer en el SDK generado, lo que se traduce en que éste mismo SDK nos ofrecerá una clase con los campos definidos en éste apartado. El campo \textit{namespace} indica en que paquete se encontrará la clase correspondiente al esquema definido dentro del SDK generado. KAA hace uso de Apache Avro para definir esquemas de serialización de datos. Ésto le permite manejar internamente la información almacenada en los esquemas.
+Aquí se definen los campos que Kaa va a proveer en el SDK generado, lo que se traduce en que éste mismo SDK nos ofrecerá una clase con los campos definidos en éste apartado. El campo \textit{namespace} indica en que paquete se encontrará la clase correspondiente al esquema definido dentro del SDK generado. Kaa hace uso de Apache Avro para definir esquemas de serialización de datos. Ésto le permite manejar internamente la información almacenada en los esquemas.
 
 \bigskip
 
@@ -396,7 +397,7 @@ Aquí se definen los campos que KAA va a proveer en el SDK generado, lo que se t
 }
 \end{lstlisting}
 
-Ahora ya tenemos el esquema definido en KAA como muestran la \textit{figura 6.12} y la \textit{figura 6.13}:
+Ahora ya tenemos el esquema definido en Kaa como muestran la \textit{figura 6.12} y la \textit{figura 6.13}:
 
 \begin{figure}[!ht]
   \begin{center}
@@ -424,7 +425,7 @@ Ahora ya tenemos el esquema definido en KAA como muestran la \textit{figura 6.12
 
 \subsection{Instalación}
 
-El proceso para definir la máquina virtual que contiene Cassandra es el mismo que el de KAA a excepción de dos puntos, el primero es el tipo de instancia. Dentro de \textit{Community AMIs} debemos buscar \texit{Cassandra} y elegir la versión más reciente.
+El proceso para definir la máquina virtual que contiene Cassandra es el mismo que el de Kaa a excepción de dos puntos, el primero es el tipo de instancia. Dentro de \textit{Community AMIs} debemos buscar \texit{Cassandra} y elegir la versión más reciente.
 
 \begin{figure}[!ht]
   \begin{center}
@@ -475,7 +476,7 @@ CREATE KEYSPACE rsmapv0 WITH replication = {
 
 \newpage
 
-Ahora es momento de volver a KAA y definir el \textit{LogAppender} que se encargará de decirle a los clientes cómo y donde tienen que enviar los datos mediante el SDK. En nuestro caso será la base de datos que acabamos de configurar. Ésto lo haremos en la sección de Log appenders mediante un fichero \textit{json} con la siguiente estructura:
+Ahora es momento de volver a Kaa y definir el \textit{LogAppender} que se encargará de decirle a los clientes cómo y donde tienen que enviar los datos mediante el SDK. En nuestro caso será la base de datos que acabamos de configurar. Ésto lo haremos en la sección de Log appenders mediante un fichero \textit{json} con la siguiente estructura:
 
 
 \begin{lstlisting}[language=json,caption={Esquema de log appender en JSON},label={lst:json_personal}]
@@ -585,7 +586,7 @@ Los campos a tener en consideración en este archivo son los siguientes:
 
 Por tanto en éste fichero se especifica el usuario y la contraseña de Cassandra que han sido ocultados por seguridad, la IP pública del servidor Cassandra y campos del final indican la equivalencia entre los campos de esquema creado anteriormente y las tablas en Cassandra.
 
-Una vez generemos el esquema, KAA se conectará a Cassandra y creará las tablas según el formato que le hemos indicado en el mapa \textit{columnMapping}.
+Una vez generemos el esquema, Kaa se conectará a Cassandra y creará las tablas según el formato que le hemos indicado en el mapa \textit{columnMapping}.
 
 \bigskip
 
@@ -663,13 +664,13 @@ Ya sólo nos queda reiniciar el servicio:
 	$ sudo ./stack/ctlscript.sh start cassandra
 \end{lstlisting}
 
-A modo de resumen, hasta el momento tenemos la plataforma KAA desplegada, en ella se encuentra el esquema de datos a usar y el LogAppender que indica a donde se van a remitir los datos. Además tenemos Apache Cassandra desplegado y con las tablas necesarias creadas para empezar a enviar información de las señales detectadas. Ésto quiere decir estamos en disposición de generar el SDK que usarán los clientes para connectarse a Cassandra.
+A modo de resumen, hasta el momento tenemos la plataforma Kaa desplegada, en ella se encuentra el esquema de datos a usar y el LogAppender que indica a donde se van a remitir los datos. Además tenemos Apache Cassandra desplegado y con las tablas necesarias creadas para empezar a enviar información de las señales detectadas. Ésto quiere decir estamos en disposición de generar el SDK que usarán los clientes para connectarse a Cassandra.
 
 \bigskip
 
-Para generar el SDK accedemos a la interfaz web de KAA. Los SDK's se generan bajo un sistema de versiones lo que nos posibilita tener varios para una misma aplicación con distinto funcionamiento. El control de éstas versiones se gestiona mediante perfiles SDK por lo que si queremos obtener el nuestro debemos definir en primer lugar un perfil en el que también se deben especificar las versiones para los esquemas y log appenders.
+Para generar el SDK accedemos a la interfaz web de Kaa. Los SDK's se generan bajo un sistema de versiones lo que nos posibilita tener varios para una misma aplicación con distinto funcionamiento. El control de éstas versiones se gestiona mediante perfiles SDK por lo que si queremos obtener el nuestro debemos definir en primer lugar un perfil en el que también se deben especificar las versiones para los esquemas y log appenders.
 
-Una vez nos encontremos en la interfaz buscamos la aplicación creada que se detalló en la sección de \textit{Configuración de KAA} y nos situamos en la opción \textit{SDK profiles} / \textit{Add SDK Profile}.
+Una vez nos encontremos en la interfaz buscamos la aplicación creada que se detalló en la sección de \textit{Configuración de Kaa} y nos situamos en la opción \textit{SDK profiles} / \textit{Add SDK Profile}.
 
 
 \begin{figure}[!ht]
@@ -701,7 +702,7 @@ El código completo de éste módulo se encuentra en el repositorio \url{https:/
 
 \bigskip
 
-Para analizar la estructura podemos hacer una clara división en dos partes, por un lado tenemos el módulo en python que se encarga de interactuar con la tarjeta de sonido, tomar los datos y enviarlos. La segunda parte es el módulo en java que se encarga de usar el SDK generado en KAA para enviarlos a Cassandra.
+Para analizar la estructura podemos hacer una clara división en dos partes, por un lado tenemos el módulo en python que se encarga de interactuar con la tarjeta de sonido, tomar los datos y enviarlos. La segunda parte es el módulo en java que se encarga de usar el SDK generado en Kaa para enviarlos a Cassandra.
 
 \subsection{Módulo de detección}
 
@@ -724,7 +725,7 @@ Además se han usado algunas otras dependencias pertenecientes a python, su inst
 \begin{itemize}
 	\item \textbf{queue:} contine la estuctura de datos de cola, sobre la que se insertaran y leerán los datos obtenidos.
 	\item \textbf{threading:} nos permite crear hebras y procesos.
-	\item \textbf{socket:} nos servirá para enviar los datos obtenidos desde Python al SDK de KAA que, recordemos que está en Java.
+	\item \textbf{socket:} nos servirá para enviar los datos obtenidos desde Python al SDK de Kaa que, recordemos que está en Java.
 \end{itemize}
 
 \bigskip
@@ -928,7 +929,7 @@ else:
 	if(consequtive > consequtive_blocks):
 		print("Sending data to cassandra")
 		while not send_queue.empty():
-			# detected case, sending items to KAA SDK via TCP socket
+			# detected case, sending items to Kaa SDK via TCP socket
 			item_to_send = send_queue.get()
 			linestr =str(item_to_send)+"\n"
 			linebytes = bytes(linestr, 'utf-8')
@@ -967,11 +968,11 @@ Las funciones \textit{producer} y \textit{consumer} son llamadas cuando se inici
 
 \subsection{Módulo de envío}
 
-Éste módulo se encargará de de inicializar el Socket necesario para que \textit{VehicleAnalyzer.py} le proporcione los datos que posteriormente enviará a Cassandra. La estructura es más simple que la del módulo anterior en gran medida a que el SDK que proporciona KAA tiene una interfaz muy cómoda para trabajar con ella.
+Éste módulo se encargará de de inicializar el Socket necesario para que \textit{VehicleAnalyzer.py} le proporcione los datos que posteriormente enviará a Cassandra. La estructura es más simple que la del módulo anterior en gran medida a que el SDK que proporciona Kaa tiene una interfaz muy cómoda para trabajar con ella.
 
 \subsubsection{Dependencias}
 
-Las dependencias necesarias son el SDK generado por KAA en formato \textit{.JAR} así como otras dependencias ajenas pertenecientes a KAA. Todas ellas se encuentran bajo el directorio \textit{sender} y se pueden identificar con los siguientes nombres:
+Las dependencias necesarias son el SDK generado por Kaa en formato \textit{.JAR} así como otras dependencias ajenas pertenecientes a Kaa. Todas ellas se encuentran bajo el directorio \textit{sender} y se pueden identificar con los siguientes nombres:
 
 \begin{itemize}
 	\item kaa-java-ep-sdk.jar
@@ -982,13 +983,13 @@ Las dependencias necesarias son el SDK generado por KAA en formato \textit{.JAR}
 
 \subsubsection{Resumen de ejecución}
 
-La primera tarea inicia el cliente KAA \texit{kaaClient} sobre el cual se enviarán los datos.
+La primera tarea inicia el cliente Kaa \texit{kaaClient} sobre el cual se enviarán los datos.
 
 Lo siguiente es inicializar el Socket y esperar la llegada de mensajes, los dos primeros indicarán localización e id como se indicó anteriormente.
 
 Mientras no se detecte una señal de parada (\textit{carácter 'q'}) el Socket estará aceptando conexiones y leyendo los datos de cada una.
 
-Para cada conexion crea un objeto de la clase \textit{AudioReport}, éste nombre y sus atributos vienen definidos por los esquemas que definimos anteriormente sobre la plataforma KAA. Tras asociarle los valores pertinentes el objeto es enviado gracias a la función \textit{addLogRecord(report);} que añadirá éste objeto en forma de entrada a Cassandra.
+Para cada conexion crea un objeto de la clase \textit{AudioReport}, éste nombre y sus atributos vienen definidos por los esquemas que definimos anteriormente sobre la plataforma Kaa. Tras asociarle los valores pertinentes el objeto es enviado gracias a la función \textit{addLogRecord(report);} que añadirá éste objeto en forma de entrada a Cassandra.
 
 \newpage
 
@@ -1068,7 +1069,7 @@ class Signal(models.Model):
   	return self.device_id
 \end{lstlisting}
 
-Un campo a tener en consideración es el llamado \textit{created}, en concreto el argumento \textbf{auto\_now=True} que nos va a permitir que cada vez que un objeto almacenado del tipo \textit{Signal} sea creado o actualizado, el valor de éste campo será actualizado con el \textit{timestamp} relativo a la fecha de dicho cambio. Así podremos tener constancia de cual fué el último momento en el se actualizo, por ejemplo, el campo \textit{level}.
+Un campo a tener en consideración es el llamado \textit{created}, en concreto el argumento \textbf{auto\_now=True} que nos va a permitir que cada vez que un objeto almacenado del tipo \textit{Signal} sea creado o actualizado, el valor de éste campo será actualizado con el \textit{timestamp} relativo a la fecha de dicho cambio. Así podremos tener constancia de cual fué el último momento en el se actualizó, por ejemplo, el campo \textit{level}.
 
 
 \newpage
@@ -1207,6 +1208,52 @@ Para cada señal que se va a representar se tiene su valor \textit{level}. Segú
 \end{figure}
 
 En un principio se pensó en efectuar ésta comprobación en la parte lógica de la aplicación pero como los datos se obtienen de todas formas en el cliente, se aprovecha ésta situación para realizar la comprobación en el navegador de éste modo se libera carga del servidor web.
+
+\bigskip
+
+\subsubsection{Aspecto Final}
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=0.3]{../images/web/main1.png}
+		\caption{Home de la web}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=0.3]{../images/web/main2.png}
+		\caption{Sección de visualizadores}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=0.45]{../images/web/main3.png}
+		\caption{Sección de características}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=0.3]{../images/web/main4.png}
+		\caption{Sección de contacto}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[scale=0.3]{../images/web/map.png}
+		\caption{Sección del mapa}
+    \label{fig:kaa}
+	\end{center}
+\end{figure}
+
+\newpage
 
 \subsection{API Rest}
 

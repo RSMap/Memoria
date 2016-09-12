@@ -1,4 +1,6 @@
 \chapter{Análisis}
+\label{chap4}
+
 
 \subsection{Metodología}
 
@@ -16,11 +18,11 @@ Dentro de cada iteración tenemos unas tareas que cumplir para darla por termina
 \end{figure}
 
 
-Por otra parte, es la manera que más natural resulta a la hora de desarrollar software pues se van completano hitos. Cada uno de ellos define una funcionalidad implementada por lo que si se desea abrir un nuevo camino \textit{(también llamados fork o roadmap)} en la aplicación tenemos varios puntos de partida evitando tener que empezar desde cero en caso de llegar a un \textit{punto muerto} en el desarrollo.
+Por otra parte, es la manera que más natural resulta a la hora de desarrollar software pues se van completano hitos. Cada uno de ellos define una funcionalidad implementada por lo que si se desea abrir un nuevo camino \textit{(también conocidos como Fork o Roadmap)} en la aplicación tenemos varios puntos de partida evitando tener que empezar desde cero en caso de llegar a un \textit{punto muerto} en el desarrollo.
 
-Las iteraciones se llevan acabo sobre las tareas de Implemetación, pruebas y documentación las cuales se detallan más abajo en éste capítulo.
+Las iteraciones se llevan acabo sobre las tareas de Implemetación, pruebas.
 
-http://mprende.co/gesti%C3%B3n/agile-scrum-y-lean-startups-metodolog%C3%ADas-de-desarrollo-%C3%A1gil-de-productos
+
 
 \section{Análisis de requisitos}
 
@@ -83,7 +85,7 @@ Aquí se enumeran las propiedades ligadas al desarrollo e implementación que el
 
 \begin{itemize}
   \item \textbf{RNF-0.} El software de terceros usado debe ser Open Source, así como los SO usados tanto para los servidores como para la Raspberry Pi.
-  \item \textbf{RNF-1.} El módulo encargado de la detección del sonido estará desarrollado en {\tt Python} (por su simplicidad), las dependencias necesarias se detallarán en la sección de implementación. Además éste módulo debe aprovechar el procesamiento en paralelo para que su funcionamiento sea óptimo.
+  \item \textbf{RNF-1.} El módulo encargado de la detección del sonido estará desarrollado en {\tt Python} por su simplicidad, las dependencias necesarias se detallarán en la sección de implementación(\ref{chap6}). Además éste módulo debe aprovechar el procesamiento en paralelo para que su funcionamiento sea óptimo.
   \item \textbf{RNF-2.} La retransmisión de datos debe ser establecida en un intervalo de tiempo mínimo para garantizar que la aplicación actúa en tiempo real.
   \item \textbf{RNF-3.} El mapa web debe mostrar la información durante un breve periodo de tiempo para no acumular señales anteriores.
   \item \textbf{RNF-4.} Siempre que sea posible se automatizarán las interacciones con cualquier elemento del sistema mediante scripts.
@@ -112,7 +114,6 @@ La información que se almacenará en el sistema se puede dividir en dos apartad
 
 Obsérvese que no se almacena ningún dato personal luego a efectos prácticos, los artículos 7 y 8 de la LOPD en los que se detalla el tipo de datos de carácter sensible que hay que preservar con especial atención no tienen aplicación sobre RSMap.
 
-http://www.boe.es/buscar/pdf/1999/BOE-A-1999-23750-consolidado.pdf#page=4&zoom=auto,-107,226
 
 \newpage
 
@@ -429,7 +430,7 @@ Debido a que RSMap es un servicio para proveer y aportar información, los casos
 \section{Diagramas}
 \subsection{Diagrama de paquetes}
 
-En este diagrama podemos observar las dependencias que existen entre los distintos paquetes del sistema y como el paquete \textbf{IOT} es el elemento central sobre el que se apoyan los demás. El paquete \textbf{Raspberry Pi} es dependiente del paquete de \textbf{IOT} debido a que \textbf{IOT} es el encargado de definir como los clientes van a escribir en el almacenamiento masivo. A su vez el paquete \textbf{RSMap web} es dependiente de \textbf{Raspberry Pi} debio a que las señales de vehículos se mandarán directamente a la plataforma web gracias a la \textbf{API Rest}.
+En este diagrama podemos observar las dependencias que existen entre los distintos paquetes del sistema y como el paquete \textbf{IOT} es el elemento central sobre el que se apoyan los demás. El paquete \textbf{Raspberry Pi} es dependiente del paquete de \textbf{IOT} debido a que \textbf{IOT} es el encargado de definir como los clientes van a escribir en el almacenamiento masivo. A su vez el paquete \textbf{RSMap web} es dependiente de \textbf{Raspberry Pi} debido a que las señales de vehículos se mandarán directamente a la plataforma web gracias a la \textbf{API REST}.
 
 Por otra parte tenemos el paquete \textbf{Visualizador} el cual usa al paquete \textbf{Almacenamiento masivo} para proveerse de información que mostrar. Por último \textbf{Almacenamiento masivo} es dependiente de \textbf{IOT} debido a que los esquemas (estructura de almacenamiento) se definen en \textbf{IOT} y éste se encarga de definirlas en el \textbf{Almacenamiento masivo}.
 
@@ -445,11 +446,11 @@ Por otra parte tenemos el paquete \textbf{Visualizador} el cual usa al paquete \
 
 \subsection{Diagrama arquitectónico}
 
-En ésta sección se detallan los elementos de la estructura que compondrá la aplicación. Debido a que los dispositivos receptores \textbf{(Raspberry pi)} poseen una estructura interna la cual merece atención se han detallado por separado el diagrama de los receptores \textit{(figura 4.5)} y el del sistema completo \textit{(figura 4.6)}.
+En ésta sección se detallan los elementos de la estructura que compondrá la aplicación. Debido a que los dispositivos receptores \textbf{(Raspberry pi)} poseen una estructura interna la cual merece atención se han detallado por separado el diagrama de los receptores \textit{(Figura \ref{fig:ar_rpi})} y el del sistema completo \textit{(Figura \ref{fig:ar_rsmap})}.
 
 \bigskip
 
-El sistema recibirá la entrada de audio mediante un micrófono, tras ésto el módulo encargao de recolectar los datos efectuará un filtrado previo evitando así analizar datos innecesarios de ésta manera minimizamos la sobrecarga del dispositivo. Tras ésto se procede a analizar los datos que han pasado el primer filtro. Por último se envían los datos con los resultados a los distintos sistemas de almacenamiento que se detallan en el siguiente diagrama.
+El sistema recibirá la entrada de audio mediante un micrófono, tras ésto el módulo encargado de recolectar los datos efectuará un filtrado previo evitando así analizar datos innecesarios de ésta manera minimizamos la sobrecarga del dispositivo. Tras ésto se procede a analizar los datos que han pasado el primer filtro. Por último se envían los datos con los resultados a los distintos sistemas de almacenamiento que se detallan en el siguiente diagrama.
 
 \bigskip
 
@@ -460,6 +461,8 @@ El sistema recibirá la entrada de audio mediante un micrófono, tras ésto el m
   \label{fig:ar_rpi}
   \end{center}
 \end{figure}
+
+\newpage
 
 Ahora se muestra cual será la estructura en conjunto de todos los elementos que conforman \textbf{RSMap.}
 
@@ -481,6 +484,8 @@ Como último elemento nos queda \textbf{Visualizador}, que actúa a modo de Note
 \newpage
 
 \subsection{Diagrama de clases}
+
+En éste diagrama se presentan los elementos de RSMap como clases y cuales serían los métodos y campos ideales para cada uno de ellos.
 
 \begin{figure}[!ht]
   \begin{center}
@@ -576,13 +581,13 @@ Ahora se detallan los pasos de forma generalizada que cada tipo de usuario reali
 
 \subsection{Diagramas de interfaz}
 
-Aquí se presentan dos pequeños esbozos de una aproximación a la interfaz de la web, no se ha entrado en mucho nivel de detalle debido a que la idea es usar una plantilla de Bootstrap y adaptarla a las necesidades, en cualquier caso el aspecto deberá asemejarse al ilustrado en la \textit{figura 4.7} para la página principal y para la página del mapa el de la \textit{figura 4.8}.
+Aquí se presentan dos pequeños esbozos de una aproximación a la interfaz de la web, no se ha entrado en mucho nivel de detalle debido a que la idea es usar una plantilla de Bootstrap y adaptarla a las necesidades, en cualquier caso el aspecto deberá asemejarse al ilustrado en la \textit{Figura \ref{fig:i1}} para la página principal y para la página del mapa el de la \textit{Figura \ref{fig:i2}}.
 
 \begin{figure}[!ht]
   \begin{center}
   \includegraphics[scale=0.6]{../images/diag_plan/ui_general.png}
   \caption{Boceto de la página principal}
-  \label{fig:ar_rsmap}
+  \label{fig:i1}
   \end{center}
 \end{figure}
 
@@ -592,6 +597,6 @@ Aquí se presentan dos pequeños esbozos de una aproximación a la interfaz de l
   \begin{center}
   \includegraphics[scale=0.65]{../images/diag_plan/ui_mapa.png}
   \caption{Boceto de la página del mapa}
-  \label{fig:ar_rsmap}
+  \label{fig:i2}
   \end{center}
 \end{figure}

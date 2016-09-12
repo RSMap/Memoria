@@ -45,7 +45,7 @@ $python spectrogram.py -d <id del dispositivo>
 Tras ésto se nos mostrará un espectrograma que representa mediante carácteres el nivel de ruido detectado. Al final de la línea aparecen dos números, el primero indica los bloques consecutivos que se han obtenido antes de volver al silencio y el segundo la suma de los valores para cada bloque.
 
 Dichas variables las podemos identificar dentro del código como
-\textit{consequtive_blocks} y \textit{threshold}. Jugando con éstos valores podremos deducir cuando pasa un vehículo cuantos bloques ocupa así como el valor mínimo para tener en consideración que son válidos.
+\textit{consequtive\_blocks} y \textit{threshold}. Jugando con éstos valores podremos deducir cuando pasa un vehículo cuantos bloques ocupa así como el valor mínimo para tener en consideración que son válidos.
 
 \bigskip
 
@@ -65,13 +65,13 @@ Cuando esté listo, mostrará un mensaje de que se están esperano conexiones TC
 
 Por último nos dirigimos al directorio \textit{analyzer}, lo primero que vamos a hacer es instalar las dependencias con:
 
-\begin{lstlisting}[language=bash,caption={Instalar epenencias},label={lst:pi1}]
+\begin{lstlisting}[language=bash,caption={Instalar depenencias},label={lst:pi1}]
 $ pip install -r requirements.txt
 \end{lstlisting}
 
 Modificamos el archivo con los parámetros obtenidos anteriormente y lo lanzamos con:
 
-\begin{lstlisting}[language=bash,caption={Instalar epenencias},label={lst:pi1}]
+\begin{lstlisting}[language=bash,caption={Ejecución de VehicleDetection.py},label={lst:pi1}]
 $ python VehicleDetection.py
 \end{lstlisting}
 
