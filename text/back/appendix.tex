@@ -1,0 +1,78 @@
+\addcontentsline{toc}{chapter}{Anexo. Manual de Usuario}
+\chapter*{Anexo. Manual de Usuario para aportar datos a RSMap}
+
+En éste anexo se detallan los pasos a seguir para configurar un dispositivo y contribuir al aporte de datos a RSMap.
+
+\bigskip
+
+En primer lugar debemos asegurarnos de tener instalado Git cuya versión no es realmente importante, Python en su versión 3.5.2, pip en su versión 8 y Java en su versión 8.
+
+\begin{lstlisting}[language=bash,caption={Versiones requeridas},label={lst:pi1}]
+$ git --version
+git version 2.9.3
+$ python --version
+3.5.2
+$ pip --version
+pip 8.1.2 from /opt/virtualenvs/py3/lib/python3.5/site-packages (python 3.5)
+$ java --version
+openjdk version "1.8.0_102"
+OpenJDK Runtime Environment (build 1.8.0_102-b14)
+OpenJDK 64-Bit Server VM (build 25.102-b14, mixed mode)
+\end{lstlisting}
+
+En caso de no tener alguna de las dependencias, será necesario instalarlas mediante el gestor de paquetes de la distribución que se esté usando.
+
+Ahora nos descargamos el repositorio situado en la GitHub \url{https://github.com/RSMap/RSMapPi}.
+
+\begin{lstlisting}[language=bash,caption={Descarga de repositorio},label={lst:pi1}]
+$ git clone https://github.com/RSMap/RSMapPi
+\end{lstlisting}
+
+A continuación vamos a proceder a configurar los parámetros necesarios para que el receptor detecte los vehículos analizando las coniciones de la vía en la que se situa, para ello accedemos a la carpeta \textit{resources} donde encontraremos el archivo \textit{spectrogram.py}. Éste programa es un ejemplo que ofrece la librería SoundDevice y se ha modificado con el propósito de extraer el número de bloques y cota mínima necesarios para una correcta identificación de vehículos.
+
+También será necesario identificar el id del dispositivo asociado a nuestra tarjeta de sonido, para ello usamos:
+
+\begin{lstlisting}[language=bash,caption={Obtener los dispositivos de audio conectados},label={lst:pi1}]
+$python spectrogram.py -l
+\end{lstlisting}
+
+Que nos devuelve la lista de los dispositivos de audio. Tras identificar el correcto (en la mayoría de casos, denominao Default) procedemos a llamar a el script.
+
+\begin{lstlisting}[language=bash,caption={Ejecutar la aplicación de configuración},label={lst:pi1}]
+$python spectrogram.py -d <id del dispositivo>
+\end{lstlisting}
+
+Tras ésto se nos mostrará un espectrograma que representa mediante carácteres el nivel de ruido detectado. Al final de la línea aparecen dos números, el primero indica los bloques consecutivos que se han obtenido antes de volver al silencio y el segundo la suma de los valores para cada bloque.
+
+Dichas variables las podemos identificar dentro del código como
+\textit{consequtive_blocks} y \textit{threshold}. Jugando con éstos valores podremos deducir cuando pasa un vehículo cuantos bloques ocupa así como el valor mínimo para tener en consideración que son válidos.
+
+\bigskip
+
+Una vez que las tengamos editamos el archivo VehicleDetection y sustituimos los valores obtenidos por los que el programa trae por defecto. Una vez hecho ésto ya estamos en coniciones de remitir datos a RSMap, sólo necesitamos compilar el programa \texit{DataSender.java}, para ello nos dirigimos al directorio \textit{sender} e introducimos las siguientes órdenes:
+
+\begin{lstlisting}[language=bash,caption={Compilar DataSender.java},label={lst:pi1}]
+$ javac -cp kaa-java-ep-sdk.jar DataSender.java
+\end{lstlisting}
+
+Ahora ya podemos ejecutar, convenientemente unos 45 segundos antes de lanzar \textit{VehicleDetection.py} para dar tiempo a incializar todo lo necesario.
+
+\begin{lstlisting}[language=bash,caption={Lanzar DataSender},label={lst:pi1}]
+$ java -cp .:./kaa-java-ep-sdk.jar:log4j-over-slf4j-1.7.7.jar:logback-classic-1.1.2.jar:logback-core-1.1.2.jar DataSender
+\end{lstlisting}
+
+Cuando esté listo, mostrará un mensaje de que se están esperano conexiones TCP.
+
+Por último nos dirigimos al directorio \textit{analyzer}, lo primero que vamos a hacer es instalar las dependencias con:
+
+\begin{lstlisting}[language=bash,caption={Instalar epenencias},label={lst:pi1}]
+$ pip install -r requirements.txt
+\end{lstlisting}
+
+Modificamos el archivo con los parámetros obtenidos anteriormente y lo lanzamos con:
+
+\begin{lstlisting}[language=bash,caption={Instalar epenencias},label={lst:pi1}]
+$ python VehicleDetection.py
+\end{lstlisting}
+
+Si todo funciona correctamente las señales que envía éste módulo serán visibles en el mapa de RSMap y serán almacenadas en Cassandra al que se podrá acceder mediante Zeppelin.
