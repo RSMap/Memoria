@@ -1,6 +1,6 @@
 # Documento del trabajo de Fin de Grado: "RSMap"
 
-Si no dispone de las herramientas para construir el PDF, puede escargarlo desde [aquí](https://github.com/RSMap/TFG/raw/master/project.pdf).
+Si no dispone de las herramientas para construir el PDF, puede descargarlo desde [aquí](https://github.com/RSMap/TFG/raw/master/project.pdf).
 
 ## Importante:
 Tanto la estructura de éste repositorio, como la automatización para generar el documento en LaTeX ha sido definida por [Germán Martínez Maldonado](https://github.com/germaaan) localizada en el repositorio [TFG](https://github.com/germaaan/TFG).
